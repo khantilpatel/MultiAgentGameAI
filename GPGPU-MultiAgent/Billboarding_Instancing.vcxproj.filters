@@ -1,0 +1,329 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{83cc235d-93d0-459b-a85b-d7f14fbe7ffd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="class-shaders">
+      <UniqueIdentifier>{fc0ef6b0-0936-4585-bbdd-a980e6cb8b52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="class-framework">
+      <UniqueIdentifier>{cd03fed1-28d7-43da-a065-4f90768354e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="class-framework\graphics">
+      <UniqueIdentifier>{87b9b1e7-cf8c-4c47-91cf-61514c343d78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="class-framework\utility">
+      <UniqueIdentifier>{87617f74-b445-4805-8d45-f7bc26cea181}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="class-modules">
+      <UniqueIdentifier>{5fc3aa8b-d90f-447c-b1ff-2b6d7011484f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="class-modules\basic-particle_system">
+      <UniqueIdentifier>{984c5a9e-a778-42d8-9b77-bd040455047d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="class-modules\advanced-particle_system">
+      <UniqueIdentifier>{5d0b8250-a63c-4679-976b-dd75cc0461e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="class-shaders\Particle Effects">
+      <UniqueIdentifier>{c2746664-cbcd-4f9d-b001-00737a10e621}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\ParticleEffects">
+      <UniqueIdentifier>{50ab1be4-b602-4f60-aa66-75a3cadc0dd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="class-framework\utility\skybox">
+      <UniqueIdentifier>{fc35d960-6dbd-49ad-9939-888fc26e62fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="class-AI">
+      <UniqueIdentifier>{77da4b9b-de1d-42a2-b60c-faf370010148}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="class-shaders\Multi Agents">
+      <UniqueIdentifier>{066c17a1-02ed-48d6-b2fc-c8393af0da9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\ComputeShaders">
+      <UniqueIdentifier>{e330fce8-5a7d-4591-92e0-840a7e1fc10d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\DrawShaders">
+      <UniqueIdentifier>{6af64e2b-a204-41e7-b1a7-e33b24563bb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="class-framework\utility\GeometryUtility">
+      <UniqueIdentifier>{5fc449b2-ed35-428b-bef9-5c7f93ec60cf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="textureshaderclass.cpp">
+      <Filter>class-shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="systemclass.cpp">
+      <Filter>class-framework</Filter>
+    </ClCompile>
+    <ClCompile Include="inputclass.cpp">
+      <Filter>class-framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="cameraclass.cpp">
+      <Filter>class-framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="d3dclass.cpp">
+      <Filter>class-framework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphicsclass.cpp">
+      <Filter>class-framework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="modelclass.cpp">
+      <Filter>class-framework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="textureclass.cpp">
+      <Filter>class-framework\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="timerclass.cpp">
+      <Filter>class-framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Particlesystemclass.cpp">
+      <Filter>class-modules\basic-particle_system</Filter>
+    </ClCompile>
+    <ClCompile Include="particleshaderclass.cpp">
+      <Filter>class-modules\basic-particle_system</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleShaderClass.cpp">
+      <Filter>class-shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderUtility.cpp">
+      <Filter>class-framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="MathHelper.cpp">
+      <Filter>class-framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="PositionClass.cpp">
+      <Filter>class-framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleWindow.cpp">
+      <Filter>class-framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="FireParticalSystemShader.cpp">
+      <Filter>class-shaders\Particle Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="RainParticleSystem.cpp">
+      <Filter>class-shaders\Particle Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>class-framework\utility\skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryGenerator.cpp">
+      <Filter>class-framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="d3dUtil.cpp">
+      <Filter>class-framework\utility\skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="main1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AStar_Type1_ShaderClass.cpp">
+      <Filter>class-AI</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeShaderHelperClass.cpp">
+      <Filter>class-framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureUtility.cpp">
+      <Filter>class-framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="MathUtility.cpp">
+      <Filter>class-framework\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="AStar_Type2_ShaderClass.cpp">
+      <Filter>class-AI</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiAgentDrawClass.cpp">
+      <Filter>class-shaders\Multi Agents</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeShaderSortMain.cpp">
+      <Filter>shaders\ComputeShaders</Filter>
+    </ClCompile>
+    <ClCompile Include="AStar_Type3_ShaderClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="textureshaderclass.h">
+      <Filter>class-shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="systemclass.h">
+      <Filter>class-framework</Filter>
+    </ClInclude>
+    <ClInclude Include="inputclass.h">
+      <Filter>class-framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="cameraclass.h">
+      <Filter>class-framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="graphicsclass.h">
+      <Filter>class-framework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dclass.h">
+      <Filter>class-framework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="textureclass.h">
+      <Filter>class-framework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="modelclass.h">
+      <Filter>class-framework\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="timerclass.h">
+      <Filter>class-framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Particlesystemclass.h">
+      <Filter>class-modules\basic-particle_system</Filter>
+    </ClInclude>
+    <ClInclude Include="particleshaderclass.h">
+      <Filter>class-modules\basic-particle_system</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleShaderClass.h">
+      <Filter>class-shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderUtility.h">
+      <Filter>class-framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="MathHelper.h">
+      <Filter>class-framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="PositionClass.h">
+      <Filter>class-framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleWindow.h">
+      <Filter>class-framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="FireParticalSystemShader.h">
+      <Filter>class-shaders\Particle Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="RainParticleSystem.h">
+      <Filter>class-shaders\Particle Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>class-framework\utility\skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryGenerator.h">
+      <Filter>class-framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dUtil.h">
+      <Filter>class-framework\utility\skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="AStar_Type1_ShaderClass.h">
+      <Filter>class-AI</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeShaderHelperClass.h">
+      <Filter>class-framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureUtility.h">
+      <Filter>class-framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="MathUtility.h">
+      <Filter>class-framework\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="AStar_Type2_ShaderClass.h">
+      <Filter>class-AI</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiAgentDrawClass.h">
+      <Filter>class-shaders\Multi Agents</Filter>
+    </ClInclude>
+    <ClInclude Include="AStar_Type3_ShaderClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FireShader.hlsl">
+      <Filter>shaders\ParticleEffects</Filter>
+    </None>
+    <None Include="particle.ps">
+      <Filter>shaders\DrawShaders</Filter>
+    </None>
+    <None Include="particle.vs">
+      <Filter>shaders\DrawShaders</Filter>
+    </None>
+    <None Include="simple.ps">
+      <Filter>shaders\DrawShaders</Filter>
+    </None>
+    <None Include="simple.vs">
+      <Filter>shaders\DrawShaders</Filter>
+    </None>
+    <None Include="texture.ps">
+      <Filter>shaders\DrawShaders</Filter>
+    </None>
+    <None Include="texture.vs">
+      <Filter>shaders\DrawShaders</Filter>
+    </None>
+    <None Include="..\..\GPGPU-AI\Engine\Activity1.nvact" />
+    <None Include="GPGPU-AI.nvact" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="seafloor.dds">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="RainGeometryShader.hlsl">
+      <Filter>shaders\ParticleEffects</Filter>
+    </FxCompile>
+    <FxCompile Include="DrawFireParticleShader.hlsl">
+      <Filter>shaders\ParticleEffects</Filter>
+    </FxCompile>
+    <FxCompile Include="RainPixelShader.hlsl">
+      <Filter>shaders\ParticleEffects</Filter>
+    </FxCompile>
+    <FxCompile Include="RainTestGeometryShader.hlsl">
+      <Filter>shaders\ParticleEffects</Filter>
+    </FxCompile>
+    <FxCompile Include="GeometryShaderFire.hlsl">
+      <Filter>shaders\ParticleEffects</Filter>
+    </FxCompile>
+    <FxCompile Include="GeometryShaderFireTest.hlsl">
+      <Filter>shaders\ParticleEffects</Filter>
+    </FxCompile>
+    <FxCompile Include="SkyPixelShader.hlsl">
+      <Filter>shaders\DrawShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="BasicCompute11_new.hlsl">
+      <Filter>shaders\ComputeShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="ComputeShaderSort11.hlsl">
+      <Filter>shaders\ComputeShaders</Filter>
+    </FxCompile>
+    <FxCompile Include="MultiAgentDraw_CS.hlsl">
+      <Filter>class-shaders\Multi Agents</Filter>
+    </FxCompile>
+    <FxCompile Include="AStar_Type1_ComputeShader.hlsl">
+      <Filter>class-AI</Filter>
+    </FxCompile>
+    <FxCompile Include="AStar_Type2_ComputeShader.hlsl">
+      <Filter>class-AI</Filter>
+    </FxCompile>
+    <FxCompile Include="MultiAgentDraw_VS.hlsl">
+      <Filter>class-shaders\Multi Agents</Filter>
+    </FxCompile>
+    <FxCompile Include="MultiAgentDraw_PS.hlsl">
+      <Filter>class-shaders\Multi Agents</Filter>
+    </FxCompile>
+    <FxCompile Include="MultiAgentRender_VS.hlsl">
+      <Filter>class-shaders\Multi Agents</Filter>
+    </FxCompile>
+    <FxCompile Include="MultiAgentRender_PS.hlsl">
+      <Filter>class-shaders\Multi Agents</Filter>
+    </FxCompile>
+    <FxCompile Include="MultiAgentRender_GS.hlsl">
+      <Filter>class-shaders\Multi Agents</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
