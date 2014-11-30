@@ -61,6 +61,9 @@
     <Filter Include="class-framework\utility\GeometryUtility">
       <UniqueIdentifier>{5fc449b2-ed35-428b-bef9-5c7f93ec60cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="logger">
+      <UniqueIdentifier>{0cada0c5-13ad-4ee9-ad76-11bfc3803c08}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -156,6 +159,30 @@
     <ClCompile Include="AStar_Type3_ShaderClass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LoggerCpp\Config.cpp">
+      <Filter>logger</Filter>
+    </ClCompile>
+    <ClCompile Include="LoggerCpp\DateTime.cpp">
+      <Filter>logger</Filter>
+    </ClCompile>
+    <ClCompile Include="LoggerCpp\Log.cpp">
+      <Filter>logger</Filter>
+    </ClCompile>
+    <ClCompile Include="LoggerCpp\Logger.cpp">
+      <Filter>logger</Filter>
+    </ClCompile>
+    <ClCompile Include="LoggerCpp\Manager.cpp">
+      <Filter>logger</Filter>
+    </ClCompile>
+    <ClCompile Include="LoggerCpp\OutputConsole.cpp">
+      <Filter>logger</Filter>
+    </ClCompile>
+    <ClCompile Include="LoggerCpp\OutputDebug.cpp">
+      <Filter>logger</Filter>
+    </ClCompile>
+    <ClCompile Include="LoggerCpp\OutputFile.cpp">
+      <Filter>logger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="textureshaderclass.h">
@@ -242,6 +269,54 @@
     <ClInclude Include="AStar_Type3_ShaderClass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\Channel.h">
+      <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\Config.h">
+      <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\DateTime.h">
+      <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\Exception.h">
+      <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\Formatter.h">
+      <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\Log.h">
+      <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\Logger.h">
+      <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\LoggerCpp.h">
+      <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\Manager.h">
+      <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\Output.h">
+      <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\OutputConsole.h">
+      <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\OutputDebug.h">
+      <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\OutputFile.h">
+      <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\shared_ptr.hpp">
+      <Filter>logger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerCpp\Utils.h">
+      <Filter>logger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="FireShader.hlsl">
@@ -325,5 +400,13 @@
     <FxCompile Include="MultiAgentRender_GS.hlsl">
       <Filter>class-shaders\Multi Agents</Filter>
     </FxCompile>
+    <FxCompile Include="MultiAgentSpatialHash_CS.hlsl">
+      <Filter>class-shaders\Multi Agents</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GPGPU-MultiAgent.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

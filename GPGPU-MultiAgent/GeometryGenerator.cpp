@@ -544,10 +544,10 @@ void GeometryGenerator::CreateGrid(float width, float depth, UINT m, UINT n, Mes
 	int centerCounter = 0;
 	for (UINT i = 0; i < m; ++i)
 	{
-		float z = halfDepth - i*dz;
+		float z = depth - i*dz; //halfDepth - i*dz;
 		for (UINT j = 0; j < n; ++j)
 		{
-			float x = -halfWidth + j*dx;
+			float x = j*dx;//-halfWidth + j*dx;
 
 			meshData.Vertices[i*n + j].Position = XMFLOAT3(x, 0.0f, z);
 			meshData.Vertices[i*n + j].Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
@@ -561,22 +561,23 @@ void GeometryGenerator::CreateGrid(float width, float depth, UINT m, UINT n, Mes
 			if (i < m - 1)
 			{
 				float x_c, z_c;
-
-				if (x >= -halfWidth + dx)
+				float halfWidth = 0.5f*width;
+				float halfDepth = 0.5f*depth;
+				if (x >=  dx)
 				{
-					x_c = (meshData.Vertices[i*n + (j-1)].Position.x + meshData.Vertices[i*n + j].Position.x) / 2;
+					x_c = (meshData.Vertices[i*n + (j - 1)].Position.x + meshData.Vertices[i*n + j].Position.x) / 2;
 
-					z_c = ((halfDepth - i*dz) + (halfDepth - (i + 1)*dz)) / 2;
+					z_c = ((depth - i*dz) + (depth - (i + 1)*dz)) / 2;
 
 					meshData.Centers[centerCounter].x = x_c;
 					meshData.Centers[centerCounter].y = 0.0f;
 					meshData.Centers[centerCounter].z = z_c;
 					centerCounter++;
-
-					//std::cout << "\n x_c::" << x_c << " z_c::" << z_c << "\n";
-				//	y_c = 
 				}
-				
+				//std::cout << "\n x_c::" << x_c << " z_c::" << z_c << "\n";
+				//	y_c = 
+
+
 			}
 		}
 	}

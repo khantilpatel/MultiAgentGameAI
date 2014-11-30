@@ -157,7 +157,7 @@ bool AStar_Type1_ShaderClass::createConstantBuffer(ID3D11Device* device, ID3D11D
 
 	//	g_vBuf1[i].f = (float)i;
 	//}
-
+	float VELOCITY = 0.5;
 	float randomFactor_Min = -1;
 	float randomFactor_Max = 1;
 
@@ -166,128 +166,211 @@ bool AStar_Type1_ShaderClass::createConstantBuffer(ID3D11Device* device, ID3D11D
 	Agent a1;
 
 	int agentsCount = 0;
-	for (int j = 0; j < 8; j++){
-		int2 sourceNode;
-		sourceNode.x1 = 0;
-		sourceNode.y1 = j;
 
-		int2 targetNode;
-		targetNode.x1 = 7;
-		targetNode.y1 = j;
-		a1.sourceLoc = sourceNode;
-		a1.targetLoc = targetNode;
+	int2 sourceNode;
+	int2 targetNode;
+	AgentRender agentRender;
 
-		for (int i = 0; i < 100; i++)
-		{
-			a1.id = agentsCount;
-			agentList[agentsCount] = a1;
-			AgentRender agentRender;
-			agentRender.agentId = agentsCount;
-			agentRender.sourceLoc = sourceNode;
-			agentRender.currentInterpolationId = 0;
-			agentRender.pathCount = 0;
-			agentRender.status = 0;
-			agentRender.velocity = 0; // generate random value for velocity TODO: find the random value range
-			agentRender.randomFactor_X = RandomFloat(randomFactor_Min, randomFactor_Max);
-			agentRender.randomFactor_Y = RandomFloat(randomFactor_Min, randomFactor_Max);
-			agentRenderList[agentsCount] = agentRender;
-			agentsCount = agentsCount + 1;
+	// Agent 0: 	
+	sourceNode.x1 = 0;
+	sourceNode.y1 = 0;
+	
+	targetNode.x1 = 2;
+	targetNode.y1 = 2;
+	a1.sourceLoc = sourceNode;
+	a1.targetLoc = targetNode;
+	
+	a1.id = agentsCount;
+	agentList[agentsCount] = a1;
+	agentRender.isFirstPass = 0;
+	agentRender.agentId = agentsCount;
+	agentRender.sourceLoc = sourceNode;
+	agentRender.currentInterpolationId = 0;
+	agentRender.pathCount = 0;
+	agentRender.status = 0;
+	agentRender.velocity = VELOCITY; // generate random value for velocity TODO: find the random value range
+	agentRender.randomFactor_X = 0; //RandomFloat(randomFactor_Min, randomFactor_Max);
+	agentRender.randomFactor_Y = 0;//RandomFloat(randomFactor_Min, randomFactor_Max);
+	agentRenderList[agentsCount] = agentRender;
+	agentsCount = agentsCount + 1;
 
-		}		
-	}
+	// Agent 1: 	
+	sourceNode.x1 = 2;
+	sourceNode.y1 = 0;
 
-	// agentsCount = 800;
-	for (int j = 0; j < 8; j++){
-		int2 sourceNode;
-		sourceNode.x1 = 1;
-		sourceNode.y1 = j;
+	targetNode.x1 = 0;
+	targetNode.y1 = 2;
+	a1.sourceLoc = sourceNode;
+	a1.targetLoc = targetNode;
 
-		int2 targetNode;
-		targetNode.x1 = 6;
-		targetNode.y1 = j;
-		a1.sourceLoc = sourceNode;
-		a1.targetLoc = targetNode;
+	agentList[agentsCount] = a1;
+	agentRender.sourceLoc = sourceNode;
+	agentRender.agentId = agentsCount;
+	agentRenderList[agentsCount] = agentRender;
+	agentsCount = agentsCount + 1;
 
-		for (int i = 0; i < 100; i++)
-		{
-			a1.id = agentsCount;
-			agentList[agentsCount] = a1;
-			AgentRender agentRender;
-			agentRender.agentId = agentsCount;
-			agentRender.sourceLoc = sourceNode;
-			agentRender.currentInterpolationId = 0;
-			agentRender.pathCount = 0;
-			agentRender.status = 0;
-			agentRender.velocity = 0; // generate random value for velocity TODO: find the random value range
-			agentRender.randomFactor_X = RandomFloat(randomFactor_Min, randomFactor_Max);
-			agentRender.randomFactor_Y = RandomFloat(randomFactor_Min, randomFactor_Max);
-			agentRenderList[agentsCount] = agentRender;
-			agentsCount = agentsCount + 1;
-		}
-		
-	}
+	// Agent 2: 	
+	sourceNode.x1 = 2;
+	sourceNode.y1 = 2;
 
-	// agentsCount = 1600;
-	 for (int j = 0; j < 8; j++){
-		int2 sourceNode;
-		sourceNode.x1 = 7;
-		sourceNode.y1 = j;
+	targetNode.x1 = 0;
+	targetNode.y1 = 0;
+	a1.sourceLoc = sourceNode;
+	a1.targetLoc = targetNode;
 
-		int2 targetNode;
-		targetNode.x1 = 0;
-		targetNode.y1 = j;
-		a1.sourceLoc = sourceNode;
-		a1.targetLoc = targetNode;
+	agentList[agentsCount] = a1;
+	agentRender.sourceLoc = sourceNode;
+	agentRender.agentId = agentsCount;
+	agentRenderList[agentsCount] = agentRender;
+	agentsCount = agentsCount + 1;
 
-		for (int i = 0; i < 100; i++)
-		{
-			a1.id = agentsCount;
-			agentList[agentsCount] = a1;
-			AgentRender agentRender;
-			agentRender.agentId = agentsCount;
-			agentRender.sourceLoc = sourceNode;
-			agentRender.currentInterpolationId = 0;
-			agentRender.pathCount = 0;
-			agentRender.status = 0;
-			agentRender.velocity = 0; // generate random value for velocity TODO: find the random value range
-			agentRender.randomFactor_X = RandomFloat(randomFactor_Min, randomFactor_Max);
-			agentRender.randomFactor_Y = RandomFloat(randomFactor_Min, randomFactor_Max);
-			agentRenderList[agentsCount] = agentRender;
-			agentsCount = agentsCount + 1;
-		}
-		
-	}
+	// Agent 3: 	
+	sourceNode.x1 = 0;
+	sourceNode.y1 = 2;
 
-	// agentsCount = 2400;
-	 for (int j = 0; j < 8; j++){
-		int2 sourceNode;
-		sourceNode.x1 = 6;
-		sourceNode.y1 = j;
+	targetNode.x1 = 2;
+	targetNode.y1 = 0;
+	a1.sourceLoc = sourceNode;
+	a1.targetLoc = targetNode;
 
-		int2 targetNode;
-		targetNode.x1 = 1;
-		targetNode.y1 = j;
-		a1.sourceLoc = sourceNode;
-		a1.targetLoc = targetNode;
+	agentList[agentsCount] = a1;
+	agentRender.sourceLoc = sourceNode;
+	agentRender.agentId = agentsCount;
+	agentRenderList[agentsCount] = agentRender;
+	agentsCount = agentsCount + 1;
 
-		for (int i = 0; i < 100; i++)
-		{
-			a1.id = agentsCount;
-			agentList[agentsCount] = a1;
-			AgentRender agentRender;
-			agentRender.agentId = agentsCount;
-			agentRender.sourceLoc = sourceNode;
-			agentRender.currentInterpolationId = 0;
-			agentRender.pathCount = 0;
-			agentRender.status = 0;
-			agentRender.velocity = 0; // generate random value for velocity TODO: find the random value range
-			agentRender.randomFactor_X = RandomFloat(randomFactor_Min, randomFactor_Max);
-			agentRender.randomFactor_Y = RandomFloat(randomFactor_Min, randomFactor_Max);
-			agentRenderList[agentsCount] = agentRender;
-			agentsCount = agentsCount + 1;
-		}
-		
-	}
+	//*** Init 3200 Agents*********************************************/
+	//
+
+	//for (int j = 0; j < 8; j++){
+	//	int2 sourceNode;
+	//	sourceNode.x1 = 0;
+	//	sourceNode.y1 = j;
+
+	//	int2 targetNode;
+	//	targetNode.x1 = 7;
+	//	targetNode.y1 = j;
+	//	a1.sourceLoc = sourceNode;
+	//	a1.targetLoc = targetNode;
+
+	//	for (int i = 0; i < 100; i++)
+	//	{
+	//		a1.id = agentsCount;
+	//		agentList[agentsCount] = a1;
+	//		AgentRender agentRender;
+	//		agentRender.isFirstPass = 0;
+	//		agentRender.agentId = agentsCount;
+	//		agentRender.sourceLoc = sourceNode;
+	//		agentRender.currentInterpolationId = 0;
+	//		agentRender.pathCount = 0;
+	//		agentRender.status = 0;
+	//		agentRender.velocity = VELOCITY; // generate random value for velocity TODO: find the random value range
+	//		agentRender.randomFactor_X = RandomFloat(randomFactor_Min, randomFactor_Max);
+	//		agentRender.randomFactor_Y = RandomFloat(randomFactor_Min, randomFactor_Max);
+	//		agentRenderList[agentsCount] = agentRender;
+	//		agentsCount = agentsCount + 1;
+	//		
+
+	//	}		
+	//}
+
+	//// agentsCount = 800;
+	//for (int j = 0; j < 8; j++){
+	//	int2 sourceNode;
+	//	sourceNode.x1 = 1;
+	//	sourceNode.y1 = j;
+
+	//	int2 targetNode;
+	//	targetNode.x1 = 6;
+	//	targetNode.y1 = j;
+	//	a1.sourceLoc = sourceNode;
+	//	a1.targetLoc = targetNode;
+
+	//	for (int i = 0; i < 100; i++)
+	//	{
+	//		a1.id = agentsCount;
+	//		agentList[agentsCount] = a1;
+	//		AgentRender agentRender;
+	//		agentRender.isFirstPass = 0;
+	//		agentRender.agentId = agentsCount;
+	//		agentRender.sourceLoc = sourceNode;
+	//		agentRender.currentInterpolationId = 0;
+	//		agentRender.pathCount = 0;
+	//		agentRender.status = 0;
+	//		agentRender.velocity = VELOCITY; // generate random value for velocity TODO: find the random value range
+	//		agentRender.randomFactor_X = RandomFloat(randomFactor_Min, randomFactor_Max);
+	//		agentRender.randomFactor_Y = RandomFloat(randomFactor_Min, randomFactor_Max);
+	//		agentRenderList[agentsCount] = agentRender;
+	//		agentsCount = agentsCount + 1;
+	//	}
+	//	
+	//}
+
+	//// agentsCount = 1600;
+	// for (int j = 0; j < 8; j++){
+	//	int2 sourceNode;
+	//	sourceNode.x1 = 7;
+	//	sourceNode.y1 = j;
+
+	//	int2 targetNode;
+	//	targetNode.x1 = 0;
+	//	targetNode.y1 = j;
+	//	a1.sourceLoc = sourceNode;
+	//	a1.targetLoc = targetNode;
+
+	//	for (int i = 0; i < 100; i++)
+	//	{
+	//		a1.id = agentsCount;
+	//		agentList[agentsCount] = a1;
+	//		AgentRender agentRender;
+	//		agentRender.isFirstPass = 0;
+	//		agentRender.agentId = agentsCount;
+	//		agentRender.sourceLoc = sourceNode;
+	//		agentRender.currentInterpolationId = 0;
+	//		agentRender.pathCount = 0;
+	//		agentRender.status = 0;
+	//		agentRender.velocity = VELOCITY; // generate random value for velocity TODO: find the random value range
+	//		agentRender.randomFactor_X = RandomFloat(randomFactor_Min, randomFactor_Max);
+	//		agentRender.randomFactor_Y = RandomFloat(randomFactor_Min, randomFactor_Max);
+	//		agentRenderList[agentsCount] = agentRender;
+	//		agentsCount = agentsCount + 1;
+	//	}
+	//	
+	//}
+
+	//// agentsCount = 2400;
+	// for (int j = 0; j < 8; j++){
+	//	int2 sourceNode;
+	//	sourceNode.x1 = 6;
+	//	sourceNode.y1 = j;
+
+	//	int2 targetNode;
+	//	targetNode.x1 = 1;
+	//	targetNode.y1 = j;
+	//	a1.sourceLoc = sourceNode;
+	//	a1.targetLoc = targetNode;
+
+	//	for (int i = 0; i < 100; i++)
+	//	{
+	//		a1.id = agentsCount;
+	//		agentList[agentsCount] = a1;
+	//		AgentRender agentRender;
+	//		agentRender.isFirstPass = 0;
+	//		agentRender.agentId = agentsCount;
+	//		agentRender.sourceLoc = sourceNode;
+	//		agentRender.currentInterpolationId = 0;
+	//		agentRender.pathCount = 0;
+	//		agentRender.status = 0;
+	//		agentRender.velocity = VELOCITY; // generate random value for velocity TODO: find the random value range
+	//		agentRender.randomFactor_X = RandomFloat(randomFactor_Min, randomFactor_Max);
+	//		agentRender.randomFactor_Y = RandomFloat(randomFactor_Min, randomFactor_Max);
+	//		agentRenderList[agentsCount] = agentRender;
+	//		agentsCount = agentsCount + 1;
+	//	}
+	//	
+	//}
+	//********************************************************************************************
+
 
 	m_computeshader_helper->CreateStructuredBuffer(device, sizeof(Agent), NUM_AGENTS, &agentList, &m_Buffer_AgentList);
 	m_computeshader_helper->CreateBufferSRV(device, m_Buffer_AgentList, &m_BufAgentList_SRV);
@@ -503,6 +586,7 @@ bool AStar_Type1_ShaderClass::Render(ID3D11Device* device, ID3D11DeviceContext* 
 			agentRenderList[i].agentId = pathfindingResult.agentId;
 			agentRenderList[i].pathCount = counter;
 			agentRenderList[i].status = 1;
+			//agentRenderList[i].current_position = 
 		}
 		else
 		{

@@ -27,7 +27,8 @@ public:
 	HRESULT CreateVertexBuffer(ID3D11Device* pDevice, UINT uElementSize,
 		UINT uCount, void* pInitData, ID3D11Buffer** ppBufOut);
 
-	HRESULT CreateRawBuffer(ID3D11Device* pDevice, UINT uSize, void* pInitData, ID3D11Buffer** ppBufOut);
+	HRESULT CreateRawBuffer(ID3D11Device* pDevice, UINT uElementSize,
+		UINT uCount, void* pInitData, ID3D11Buffer** ppBufOut);
 
 
 	HRESULT CreateBufferSRV(ID3D11Device* pDevice, ID3D11Buffer* pBuffer, ID3D11ShaderResourceView** ppSRVOut);

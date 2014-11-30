@@ -80,14 +80,14 @@ HRESULT ComputeShaderHelperClass::CreateVertexBuffer(ID3D11Device* pDevice, UINT
 //--------------------------------------------------------------------------------------
 // Create Raw Buffer
 //--------------------------------------------------------------------------------------
-HRESULT ComputeShaderHelperClass::CreateRawBuffer(ID3D11Device* pDevice, UINT uSize, void* pInitData, ID3D11Buffer** ppBufOut)
+HRESULT ComputeShaderHelperClass::CreateRawBuffer(ID3D11Device* pDevice, UINT uElementSize, UINT uCount, void* pInitData, ID3D11Buffer** ppBufOut)
 {
 	*ppBufOut = nullptr;
 
 	D3D11_BUFFER_DESC desc;
 	ZeroMemory(&desc, sizeof(desc));
 	desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_INDEX_BUFFER | D3D11_BIND_VERTEX_BUFFER;
-	desc.ByteWidth = uSize;
+	desc.ByteWidth = uElementSize * uCount;
 	desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS;
 
 	if (pInitData)

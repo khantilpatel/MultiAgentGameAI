@@ -24,6 +24,14 @@
     <ClCompile Include="GeometryGenerator.cpp" />
     <ClCompile Include="graphicsclass.cpp" />
     <ClCompile Include="inputclass.cpp" />
+    <ClCompile Include="LoggerCpp\Config.cpp" />
+    <ClCompile Include="LoggerCpp\DateTime.cpp" />
+    <ClCompile Include="LoggerCpp\Log.cpp" />
+    <ClCompile Include="LoggerCpp\Logger.cpp" />
+    <ClCompile Include="LoggerCpp\Manager.cpp" />
+    <ClCompile Include="LoggerCpp\OutputConsole.cpp" />
+    <ClCompile Include="LoggerCpp\OutputDebug.cpp" />
+    <ClCompile Include="LoggerCpp\OutputFile.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main1.cpp" />
     <ClCompile Include="MathHelper.cpp" />
@@ -56,6 +64,21 @@
     <ClInclude Include="GeometryGenerator.h" />
     <ClInclude Include="graphicsclass.h" />
     <ClInclude Include="inputclass.h" />
+    <ClInclude Include="LoggerCpp\Channel.h" />
+    <ClInclude Include="LoggerCpp\Config.h" />
+    <ClInclude Include="LoggerCpp\DateTime.h" />
+    <ClInclude Include="LoggerCpp\Exception.h" />
+    <ClInclude Include="LoggerCpp\Formatter.h" />
+    <ClInclude Include="LoggerCpp\Log.h" />
+    <ClInclude Include="LoggerCpp\Logger.h" />
+    <ClInclude Include="LoggerCpp\LoggerCpp.h" />
+    <ClInclude Include="LoggerCpp\Manager.h" />
+    <ClInclude Include="LoggerCpp\Output.h" />
+    <ClInclude Include="LoggerCpp\OutputConsole.h" />
+    <ClInclude Include="LoggerCpp\OutputDebug.h" />
+    <ClInclude Include="LoggerCpp\OutputFile.h" />
+    <ClInclude Include="LoggerCpp\shared_ptr.hpp" />
+    <ClInclude Include="LoggerCpp\Utils.h" />
     <ClInclude Include="MathHelper.h" />
     <ClInclude Include="MathUtility.h" />
     <ClInclude Include="modelclass.h" />
@@ -64,6 +87,7 @@
     <ClInclude Include="Particlesystemclass.h" />
     <ClInclude Include="PositionClass.h" />
     <ClInclude Include="RainParticleSystem.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="ShaderUtility.h" />
     <ClInclude Include="SimpleShaderClass.h" />
     <ClInclude Include="SkyBox.h" />
@@ -171,6 +195,14 @@
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">g_render_vshader</VariableName>
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)Compiled.h</HeaderFileOutput>
     </FxCompile>
+    <FxCompile Include="MultiAgentSpatialHash_CS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compute</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">g_cshader_spatial_hash</VariableName>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)Compiled.h</HeaderFileOutput>
+    </FxCompile>
     <FxCompile Include="RainGeometryShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
@@ -191,6 +223,9 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GPGPU-MultiAgent.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{00A26749-0957-4968-87E8-E16B54A5E4A3}</ProjectGuid>

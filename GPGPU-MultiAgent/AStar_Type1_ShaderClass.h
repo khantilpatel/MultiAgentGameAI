@@ -89,6 +89,14 @@ public:
 		int H_cost;
 	};
 
+	struct float3
+	{
+		float x;
+		float y;
+		float z;
+
+	};
+
 	struct Agent
 	{
 		int id;
@@ -116,13 +124,14 @@ public:
 
 	struct AgentRender
 	{
+		XMFLOAT3 current_position;
 		int agentId;
 		int pathCount;
 		int2 sourceLoc;
 		int currentInterpolationId;
 		int status; // Agent Status: Stay at initial position 0, Move 1, No Path found 2;
 		float velocity;
-		float u;
+		float isFirstPass;
 		float randomFactor_X;
 		float randomFactor_Y;
 	};
