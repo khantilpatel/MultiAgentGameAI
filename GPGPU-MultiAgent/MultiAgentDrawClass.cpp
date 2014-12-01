@@ -23,7 +23,7 @@ MultiAgentDrawClass::MultiAgentDrawClass()
 	m_computeshader_helper = new ComputeShaderHelperClass;
 	m_ShaderUtility = new ShaderUtility;
 
-	
+
 }
 
 
@@ -48,46 +48,46 @@ bool MultiAgentDrawClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* 
 	{
 		return false;
 	}
-	
+
 	InitVertextBuffers(device, device_context);
-	
+
 	// SECTION:	Buffers
-		m_computeshader_helper->CreateStructuredBuffer(device, sizeof(XMFLOAT3), NUM_AGENTS, nullptr, &m_AgentPositionBuffer);
+	m_computeshader_helper->CreateStructuredBuffer(device, sizeof(XMFLOAT3), NUM_AGENTS, nullptr, &m_AgentPositionBuffer);
 
-		m_computeshader_helper->CreateStructuredBuffer(device, sizeof(XMFLOAT3), NUM_AGENTS, nullptr, &m_Buffer_AgentCurrentPosition);
+	m_computeshader_helper->CreateStructuredBuffer(device, sizeof(XMFLOAT3), NUM_AGENTS, nullptr, &m_Buffer_AgentCurrentPosition);
 
-		m_computeshader_helper->CreateVertexBuffer(device, sizeof(XMFLOAT3), NUM_AGENTS, nullptr, &m_AgentPositionDrawBuffer);
+	m_computeshader_helper->CreateVertexBuffer(device, sizeof(XMFLOAT3), NUM_AGENTS, nullptr, &m_AgentPositionDrawBuffer);
 
-		/** Create a Raw Buffer for Spatial Hash Table*******************************/
-		int empty_index[MAP_DIMENSIONS*MAP_DIMENSIONS];
-		
-		int empty_agentId[(MAP_DIMENSIONS*MAP_DIMENSIONS) * NUM_AGENTS_PER_BLOCK];
+	/** Create a Raw Buffer for Spatial Hash Table*******************************/
+	int empty_index[MAP_DIMENSIONS*MAP_DIMENSIONS];
 
-		std::fill_n(empty_index, MAP_DIMENSIONS*MAP_DIMENSIONS, 0);
-		
-		std::fill_n(empty_agentId, (MAP_DIMENSIONS*MAP_DIMENSIONS) * NUM_AGENTS_PER_BLOCK, 0);
+	int empty_agentId[(MAP_DIMENSIONS*MAP_DIMENSIONS) * NUM_AGENTS_PER_BLOCK];
 
-		m_computeshader_helper->CreateRawBuffer(device, sizeof(int), MAP_DIMENSIONS*MAP_DIMENSIONS, &empty_index, &m_buffer_spatial_index_table_reset);
+	std::fill_n(empty_index, MAP_DIMENSIONS*MAP_DIMENSIONS, 0);
 
-		m_computeshader_helper->CreateRawBuffer(device, sizeof(int), MAP_DIMENSIONS*MAP_DIMENSIONS, &empty_index, &m_buffer_spatial_index_table);
+	std::fill_n(empty_agentId, (MAP_DIMENSIONS*MAP_DIMENSIONS) * NUM_AGENTS_PER_BLOCK, 0);
 
-		m_computeshader_helper->CreateStructuredBuffer(device, sizeof(int), (MAP_DIMENSIONS*MAP_DIMENSIONS) * NUM_AGENTS_PER_BLOCK,
-			empty_agentId, &m_buffer_spatial_agent_id_table_reset);
+	m_computeshader_helper->CreateRawBuffer(device, sizeof(int), MAP_DIMENSIONS*MAP_DIMENSIONS, &empty_index, &m_buffer_spatial_index_table_reset);
 
-		m_computeshader_helper->CreateStructuredBuffer(device, sizeof(int), (MAP_DIMENSIONS*MAP_DIMENSIONS) * NUM_AGENTS_PER_BLOCK,
-			empty_agentId, &m_buffer_spatial_agent_id_table);
-		//********************************************************************************
+	m_computeshader_helper->CreateRawBuffer(device, sizeof(int), MAP_DIMENSIONS*MAP_DIMENSIONS, &empty_index, &m_buffer_spatial_index_table);
+
+	m_computeshader_helper->CreateStructuredBuffer(device, sizeof(int), (MAP_DIMENSIONS*MAP_DIMENSIONS) * NUM_AGENTS_PER_BLOCK,
+		empty_agentId, &m_buffer_spatial_agent_id_table_reset);
+
+	m_computeshader_helper->CreateStructuredBuffer(device, sizeof(int), (MAP_DIMENSIONS*MAP_DIMENSIONS) * NUM_AGENTS_PER_BLOCK,
+		empty_agentId, &m_buffer_spatial_agent_id_table);
+	//********************************************************************************
 	///////////////////////////////////////////////////////////////////////////////////
 
 	// SECTION: Create UAV or Views for the Buffers
-		m_computeshader_helper->CreateBufferUAV(device, m_AgentPositionBuffer, &m_view_AgentPosition_URV);
+	m_computeshader_helper->CreateBufferUAV(device, m_AgentPositionBuffer, &m_view_AgentPosition_URV);
 
-		m_computeshader_helper->CreateBufferUAV(device, m_Buffer_AgentCurrentPosition, &m_view_AgentCurrentPosition_URV);
-	
-		/** Create a Raw Buffer for Spatial Hash Table*******************************/
-		m_computeshader_helper->CreateBufferUAV(device, m_buffer_spatial_index_table, &m_view_spatial_index_table_URV);
+	m_computeshader_helper->CreateBufferUAV(device, m_Buffer_AgentCurrentPosition, &m_view_AgentCurrentPosition_URV);
 
-		m_computeshader_helper->CreateBufferUAV(device, m_buffer_spatial_agent_id_table, &m_view_spatial_agent_id_URV);
+	/** Create a Raw Buffer for Spatial Hash Table*******************************/
+	m_computeshader_helper->CreateBufferUAV(device, m_buffer_spatial_index_table, &m_view_spatial_index_table_URV);
+
+	m_computeshader_helper->CreateBufferUAV(device, m_buffer_spatial_agent_id_table, &m_view_spatial_agent_id_URV);
 	///////////////////////////////////////////////////////////////////////////////////
 	// Load Texture for Floor and other stuff
 	m_FloorTextureSRV = m_ShaderUtility->CreateTextureFromFile(device, L"Textures/edited_floor.dds");
@@ -110,7 +110,7 @@ bool MultiAgentDrawClass::InitializeShader(ID3D11Device* device, HWND hwnd)
 
 	// Initialize the pointers this function will use to null.
 	errorMessage = 0;
-	
+
 	// Compile and Create PixelShader Object
 	result = device->CreateComputeShader(g_cshader, sizeof(g_cshader), nullptr, &m_computeShader);
 	if (FAILED(result))
@@ -183,7 +183,7 @@ bool MultiAgentDrawClass::createInputLayoutDesc(ID3D11Device* device)
 	HRESULT result = true;
 
 	ID3D10Blob* errorMessage;
-	
+
 	unsigned int numElements;
 
 	const D3D11_INPUT_ELEMENT_DESC Basic32[3] =
@@ -197,7 +197,7 @@ bool MultiAgentDrawClass::createInputLayoutDesc(ID3D11Device* device)
 
 	// Create the vertex input layout.
 	result = device->CreateInputLayout(Basic32, numElements, g_vshader, sizeof(g_vshader), &m_layout);
-	
+
 	//////////////////////////////////////////////////////////////////////////
 	// Layout for Render Agents 
 	const D3D11_INPUT_ELEMENT_DESC renderAgents_DESC[1] =
@@ -239,7 +239,7 @@ bool MultiAgentDrawClass::createConstantBuffer_TextureBuffer(ID3D11Device* devic
 	}
 
 
-	
+
 	D3D11_SAMPLER_DESC samplerDesc;
 	// Create a texture sampler state description.
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -286,7 +286,7 @@ bool MultiAgentDrawClass::InitFloorGeometryVertextBuffers(ID3D11Device* device, 
 
 	GeometryGenerator geoGen;
 	geoGen.CreateBox(1.0f, 1.0f, 1.0f, box);
-	geoGen.CreateGrid(20.0f, 20.0f, GRID_SIZE + 1, GRID_SIZE+1, grid);
+	geoGen.CreateGrid(20.0f, 20.0f, GRID_SIZE + 1, GRID_SIZE + 1, grid);
 	geoGen.CreateSphere(0.5f, 20, 20, sphere);
 	geoGen.CreateCylinder(0.5f, 0.3f, 3.0f, 20, 20, cylinder);
 
@@ -406,7 +406,7 @@ bool MultiAgentDrawClass::InitFloorGeometryVertextBuffers(ID3D11Device* device, 
 	{
 		tempArray[i] = grid.Centers[i];
 	}
-	
+
 	m_computeshader_helper->CreateStructuredBuffer(device, sizeof(XMFLOAT3), grid.Centers.size(), &tempArray, &m_Buffer_GridCenterData);
 	m_computeshader_helper->CreateBufferSRV(device, m_Buffer_GridCenterData, &m_FloorCenterDataSRV);
 
@@ -454,7 +454,7 @@ bool MultiAgentDrawClass::SetShaderParameters(ID3D11DeviceContext* deviceContext
 }
 
 bool MultiAgentDrawClass::Render(ID3D11Device* device, ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix,
-	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix,	float frameTime, float gameTime, XMFLOAT3 camEyePos,
+	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, float frameTime, float gameTime, XMFLOAT3 camEyePos,
 	ID3D11UnorderedAccessView*  m_BufRenderAgentList_URV, ID3D11UnorderedAccessView*  m_BufRenderAgentPathList_URV)
 {
 	cout << "FireParticle:" << frameTime << "||" << gameTime << "||\n";
@@ -471,7 +471,7 @@ bool MultiAgentDrawClass::Render(ID3D11Device* device, ID3D11DeviceContext* devi
 		camEyePos, m_BufRenderAgentList_URV, m_BufRenderAgentPathList_URV);
 
 	// 1. interpolate the position of agents 
-	RenderComputeShader(device, deviceContext,  worldMatrix,viewMatrix, projectionMatrix,
+	RenderComputeShader(device, deviceContext, worldMatrix, viewMatrix, projectionMatrix,
 		camEyePos, m_BufRenderAgentList_URV, m_BufRenderAgentPathList_URV);
 
 	// 2. Just render the agents with cubes using geometry shader
@@ -480,19 +480,19 @@ bool MultiAgentDrawClass::Render(ID3D11Device* device, ID3D11DeviceContext* devi
 
 	// 3. Render floor for agents
 	RenderShader(device, deviceContext, worldMatrix,
-		viewMatrix, projectionMatrix,camEyePos);
+		viewMatrix, projectionMatrix, camEyePos);
 
 	return true;
 }
 
-void MultiAgentDrawClass::RenderComputeSpatialHashShader(ID3D11Device* device, ID3D11DeviceContext* deviceContext, 
-	D3DXMATRIX worldMatrix,	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, XMFLOAT3 camEyePos,
+void MultiAgentDrawClass::RenderComputeSpatialHashShader(ID3D11Device* device, ID3D11DeviceContext* deviceContext,
+	D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, XMFLOAT3 camEyePos,
 	ID3D11UnorderedAccessView*  m_BufRenderAgentList_URV, ID3D11UnorderedAccessView*  m_BufRenderAgentPathList_URV)
 {
 	deviceContext->CopyResource(m_buffer_spatial_index_table, m_buffer_spatial_index_table_reset);
 
 	deviceContext->CopyResource(m_buffer_spatial_agent_id_table, m_buffer_spatial_agent_id_table_reset);
-	bool debug = true;
+	bool debug = false;
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// Dispatch ComputeShader
 	if (debug){
@@ -553,9 +553,9 @@ void MultiAgentDrawClass::RenderComputeSpatialHashShader(ID3D11Device* device, I
 	}
 
 
-	ID3D11UnorderedAccessView* aURViews[3] = {m_view_spatial_index_table_URV,
+	ID3D11UnorderedAccessView* aURViews[3] = { m_view_spatial_index_table_URV,
 		m_view_spatial_agent_id_URV, m_BufRenderAgentList_URV
-		  };
+	};
 	deviceContext->CSSetUnorderedAccessViews(0, 3, aURViews, nullptr);
 
 	deviceContext->CSSetShader(m_computeShader_spatial_hash, nullptr, 0);
@@ -564,7 +564,7 @@ void MultiAgentDrawClass::RenderComputeSpatialHashShader(ID3D11Device* device, I
 
 	deviceContext->CSSetShader(nullptr, nullptr, 0);
 
-	ID3D11UnorderedAccessView* ppUAViewnullptr[3] = { nullptr, nullptr,nullptr };
+	ID3D11UnorderedAccessView* ppUAViewnullptr[3] = { nullptr, nullptr, nullptr };
 	deviceContext->CSSetUnorderedAccessViews(0, 3, ppUAViewnullptr, nullptr);
 
 
@@ -587,13 +587,13 @@ void MultiAgentDrawClass::RenderComputeSpatialHashShader(ID3D11Device* device, I
 
 		//cout << " spatialIndexTableGPU After******:\n";
 
-	/*	int nodes2[65];
-		for (int i = 0; i < 64; i++)
-		{
+		/*	int nodes2[65];
+			for (int i = 0; i < 64; i++)
+			{
 			nodes2[i] = spatialIndexTableGPU[i];
 
 			cout << "NodeId" << i << ":= " << spatialIndexTableGPU[i] << "\n";
-		}*/
+			}*/
 		deviceContext->Unmap(debugbuf1, 0);
 
 		debugbuf1->Release();
@@ -616,9 +616,9 @@ void MultiAgentDrawClass::RenderComputeSpatialHashShader(ID3D11Device* device, I
 		for (int i = 0; i < (MAP_DIMENSIONS*MAP_DIMENSIONS); i++)
 		{
 			//nodes2[i] = spatialIndexTableGPU[i*NUM_AGENTS_PER_BLOCK];
-	
+
 			std::string result = "";
-			
+
 			for (int j = 0; j < (NUM_AGENTS_PER_BLOCK); j++)
 			{
 				int id = (i*NUM_AGENTS_PER_BLOCK) + j;
@@ -636,20 +636,21 @@ void MultiAgentDrawClass::RenderComputeSpatialHashShader(ID3D11Device* device, I
 }
 
 void MultiAgentDrawClass::RenderComputeShader(ID3D11Device* device, ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix,
-	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix,	XMFLOAT3 camEyePos,
+	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, XMFLOAT3 camEyePos,
 	ID3D11UnorderedAccessView*  m_BufRenderAgentList_URV, ID3D11UnorderedAccessView*  m_BufRenderAgentPathList_URV)
 {
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// Dispatch ComputeShader
-	
-	ID3D11ShaderResourceView* aRViews[1] = { m_FloorCenterDataSRV};
 
-	ID3D11UnorderedAccessView* aURViews[4] = { m_view_AgentPosition_URV, m_BufRenderAgentList_URV,
-		m_BufRenderAgentPathList_URV, m_view_AgentCurrentPosition_URV};
+	ID3D11ShaderResourceView* aRViews[1] = { m_FloorCenterDataSRV };
+
+	ID3D11UnorderedAccessView* aURViews[6] = { m_view_AgentPosition_URV, m_BufRenderAgentList_URV,
+		m_BufRenderAgentPathList_URV, m_view_AgentCurrentPosition_URV, m_view_spatial_index_table_URV,
+		m_view_spatial_agent_id_URV };
 	// Now render the prepared buffers with the shader.
 	//deviceContext->CSSetConstantBuffers(0, 1, &m_BufConstantParameters);
 	deviceContext->CSSetShaderResources(0, 1, aRViews);
-	deviceContext->CSSetUnorderedAccessViews(0, 4, aURViews, nullptr);
+	deviceContext->CSSetUnorderedAccessViews(0, 6, aURViews, nullptr);
 	deviceContext->CSSetShader(m_computeShader, nullptr, 0);
 
 	deviceContext->Dispatch(2, 2, 1);
@@ -694,7 +695,7 @@ void MultiAgentDrawClass::RenderComputeShader(ID3D11Device* device, ID3D11Device
 
 }
 void MultiAgentDrawClass::RenderMultipleAgentShader(ID3D11Device* device, ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix,
-	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix,	XMFLOAT3 camEyePos)
+	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, XMFLOAT3 camEyePos)
 {
 	bool result;
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -703,14 +704,14 @@ void MultiAgentDrawClass::RenderMultipleAgentShader(ID3D11Device* device, ID3D11
 	ID3D11Buffer* bufferArrayNull[1] = { 0 };
 
 	D3DXMATRIX worldMatrix1 = *(new D3DXMATRIX);
-	
+
 	UINT stride = sizeof(XMFLOAT3);
 	UINT offset = 0;
 
 	////////////////////////////////////////////////////////////////////////////////////
 	// Set vertex Shader
 	deviceContext->CopyResource(m_AgentPositionDrawBuffer, m_AgentPositionBuffer);
-	
+
 	deviceContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_POINTLIST);
 
 	//deviceContext->P(D3D10_PRIMITIVE_TOPOLOGY_POINTLIST);
@@ -809,7 +810,7 @@ void MultiAgentDrawClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWN
 	fout.open("shader-error.txt");
 
 	// Write out the error message.
-	for (i = 0; i<bufferSize; i++)
+	for (i = 0; i < bufferSize; i++)
 	{
 		fout << compileErrors[i];
 	}
