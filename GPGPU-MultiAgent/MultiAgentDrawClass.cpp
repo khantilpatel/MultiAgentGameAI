@@ -657,8 +657,8 @@ void MultiAgentDrawClass::RenderComputeShader(ID3D11Device* device, ID3D11Device
 
 	deviceContext->CSSetShader(nullptr, nullptr, 0);
 
-	ID3D11UnorderedAccessView* ppUAViewnullptr[1] = { nullptr };
-	deviceContext->CSSetUnorderedAccessViews(0, 1, ppUAViewnullptr, nullptr);
+	ID3D11UnorderedAccessView* ppUAViewnullptr[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+	deviceContext->CSSetUnorderedAccessViews(0, 6, ppUAViewnullptr, nullptr);
 
 	ID3D11ShaderResourceView* ppSRVnullptr[1] = { nullptr };
 	deviceContext->CSSetShaderResources(0, 1, ppSRVnullptr);

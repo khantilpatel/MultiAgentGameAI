@@ -13,6 +13,7 @@ struct Agent
 	float isFirstPass; // Interpolation parameter
 	float randomFactor_X;
 	float randomFactor_Z;
+	uint seed;
 	//uint type; // Type: 0 Agent; 1 Collision box
 };
 

@@ -134,6 +134,7 @@ public:
 		float isFirstPass;
 		float randomFactor_X;
 		float randomFactor_Y;
+		UINT seed;
 	};
 
 	// Render Related Variables
