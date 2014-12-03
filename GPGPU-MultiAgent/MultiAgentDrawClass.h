@@ -54,6 +54,7 @@ class MultiAgentDrawClass
 		int type; // Type: 0 Agent; 1 Collision box
 	};
 
+	
 public:
 	static const int NUM_AGENTS = 4;
 	static const int NUM_AGENTS_PER_BLOCK = 5;
@@ -140,6 +141,7 @@ private:
 	ID3D11Buffer* m_AgentPositionBuffer;
 	ID3D11Buffer* m_AgentPositionDrawBuffer;
 	ID3D11Buffer* m_Buffer_AgentCurrentPosition;
+	ID3D11Buffer* m_Buffer_PsudoRandom;
 
 	//Spatial hash
 	ID3D11Buffer* m_buffer_spatial_index_table_reset;
@@ -158,6 +160,8 @@ private:
 
 	ID3D11UnorderedAccessView*  m_view_spatial_index_table_URV;
 	ID3D11UnorderedAccessView* m_view_spatial_agent_id_URV;
+
+	ID3D11UnorderedAccessView* m_view_psudo_random_URV;
 	//Transformation from local to world Coordinates
 	XMFLOAT4X4 mGridWorld;
 

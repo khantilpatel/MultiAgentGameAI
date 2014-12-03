@@ -50,7 +50,7 @@ RWStructuredBuffer<float3> g_AgentCurrentPositionInput : register(u3);
 
 RWByteAddressBuffer SpatialIndexTableBuffer: register(u4);
 RWStructuredBuffer<uint> SpatialAgentIdTableBuffer: register(u5);
-
+RWStructuredBuffer<float2> testRandomSample: register(u6);
 
 
 #define NUM_THREAD_X 32
@@ -120,7 +120,7 @@ float computeTimeToCollison(float2 p, float2 v, float2 p2, float radius, bool co
 	return time;
 }
 
-float2 simulateNewVelocity(Agent m_pOwner, float agent_radius, int num_neighbours, int index_agent_offset, float2 prefVelocity, bool isCollison, float _timeStep)
+float2 simulateNewVelocity(int agent_Id, Agent m_pOwner, float agent_radius, int num_neighbours, int index_agent_offset, float2 prefVelocity, bool isCollison, float _timeStep)
 {
 	float2 return_final_velocity;
 
@@ -132,23 +132,42 @@ float2 simulateNewVelocity(Agent m_pOwner, float agent_radius, int num_neighbour
 
 	float2 vCand;
 
+	float2 randomData;
+
+	uint new_seed;
+
+	float2 init_random_buffer = float2(m_pOwner.agentId, m_pOwner.seed);
+
+		if (m_pOwner.agentId == 0){
+		testRandomSample[0] = init_random_buffer;
+		}
 	for (int n = 0; n < m_sampleCountDefault; n++)
 	{
 		if (n == 0) {
 			vCand = prefVelocity;
+			randomData = vCand;
 		}
 		else {
 			do {
-				m_pOwner.seed = (P1 * m_pOwner.seed + P2);
-				float randX = (m_pOwner.seed / 65536) % N; //rand();
-				randX *= 2.0f;
+				
+				randomData = float2(0.0, 0.0);
 
-				m_pOwner.seed = (P1 + m_pOwner.seed + P2);
-				float randY = (m_pOwner.seed / 65536) % N; // rand();
+				new_seed = (P1 * m_pOwner.seed + P2);
+				float randX = (new_seed / 65536) % N; //rand();
+				randX *= 2.0f;
+				randomData.x = new_seed;
+
+				new_seed = (P1 + new_seed + P2);
+				float randY = (new_seed / 65536) % N; // rand();
 				randY *= 2.0f;
+				randomData.y = new_seed;
 
 				// Update the seed into the Buffer
-				agentList[m_pOwner.agentId].seed = m_pOwner.seed;
+				
+
+				m_pOwner.seed = new_seed;
+
+				
 
 				float x = randX - N;
 				float y = randY - N;
@@ -157,6 +176,7 @@ float2 simulateNewVelocity(Agent m_pOwner, float agent_radius, int num_neighbour
 
 				vCand = float2(x, y); //2.0f*rand() - RAND_MAX, 2.0f*rand() - RAND_MAX);
 
+				
 				float absVCand = absSq(vCand);
 				float sqrRand_Max = sqr((float)N);
 
@@ -171,7 +191,11 @@ float2 simulateNewVelocity(Agent m_pOwner, float agent_radius, int num_neighbour
 			float divide1 = max1 / N;
 
 			//vCand *= divide;
-			vCand *= divide1;
+			vCand *= divide1;			
+		}
+
+		if (m_pOwner.agentId == 0){
+			testRandomSample[n + 1] = randomData;// vCand;
 		}
 
 		float dV; // distance between candidate velocity and preferred velocity
@@ -196,7 +220,7 @@ float2 simulateNewVelocity(Agent m_pOwner, float agent_radius, int num_neighbour
 			int index_agent = index_agent_offset + i;
 			int agent_id_neighbour = SpatialAgentIdTableBuffer[index_agent];
 
-			//if (agent_id_neighbour != m_pOwner.agentId){
+			if (agent_id_neighbour != m_pOwner.agentId){
 				float ct_j; // time to collision with agent j
 				float2 Vab;
 
@@ -229,7 +253,7 @@ float2 simulateNewVelocity(Agent m_pOwner, float agent_radius, int num_neighbour
 						break;
 					}
 				}
-			//}
+			}
 		}
 
 		float penalty = m_safetyFactorDefault / ct + dV;
@@ -239,6 +263,12 @@ float2 simulateNewVelocity(Agent m_pOwner, float agent_radius, int num_neighbour
 		}		
 	}
 
+	if (m_pOwner.agentId == 0){
+		testRandomSample[251] = return_final_velocity;
+	}
+
+	agentList[m_pOwner.agentId].seed = new_seed;
+
 	return return_final_velocity;
 
 }
@@ -247,87 +277,89 @@ float2 simulateNewVelocity(Agent m_pOwner, float agent_radius, int num_neighbour
 [numthreads(NUM_THREAD_X, NUM_THREAD_Y, 1)]
 void main(uint3 DTid : SV_DispatchThreadID)
 {
-	int agentId[20];
-
-	float agent_radius = sqrt((AGENT_WIDTH*AGENT_WIDTH) + (AGENT_WIDTH*AGENT_WIDTH));
 	uint gridId = ((NUM_THREAD_X * NUM_GRID_BLOCK_X) * DTid.y) + DTid.x;
-	uint offset = gridId * (MAP_DIMENSIONS * MAP_DIMENSIONS);
-	// For testing take this i manually later make according DispatchId
-	uint agent_Id = gridId;
+	//int agentId[20];
+	if (gridId == 0 || gridId == 1 || gridId == 2 || gridId == 3){
+		float agent_radius = sqrt((AGENT_WIDTH*AGENT_WIDTH) + (AGENT_WIDTH*AGENT_WIDTH));
 
-	//float test = INFINITY;
-	//bool test_inf = isinf(test);
+		uint offset = gridId * (MAP_DIMENSIONS * MAP_DIMENSIONS);
+		// For testing take this i manually later make according DispatchId
+		uint agent_Id = gridId;
 
-	float3 m_current_position = float3(0.0, 0.0, 0.0);
-		Agent agent = agentList[agent_Id];
+		//float test = INFINITY;
+		//bool test_inf = isinf(test);
 
-	agentId[2] = agent_Id;
+		float3 m_current_position = float3(0.0, 0.0, 0.0);
+		Agent agent = agentList[gridId];
 
-	uint interpol_id = agent.currentInterpolationId; // + offset later Will Make it.
-	if (interpol_id < agent.pathCount)
-	{
-		uint interpol_A = pathList[offset + interpol_id];
-		float3 coord_A = g_GridCenterListInput[interpol_A];
-			// only for the first node of 
-			if (agent.isFirstPass < 2){
+		//agentId[2] = agent_Id;
+
+		uint interpol_id = agent.currentInterpolationId; // + offset later Will Make it.
+		if (interpol_id < agent.pathCount)
+		{
+			uint interpol_A = pathList[offset + interpol_id];
+			float3 coord_A = g_GridCenterListInput[interpol_A];
+				// only for the first node of 
+				if (agent.isFirstPass < 2){
 				m_current_position = coord_A;
 				agentList[agent_Id].isFirstPass += 1;
-			}
-			else{
-				m_current_position = agent.current_position;
-				//float3(agentList[agent_Id].current_position_x, agentList[agent_Id].current_position_y, 
-				//agentList[agent_Id].current_position_z);
-			}
-			uint interpol_B = pathList[offset + (interpol_id + 1)];
-			float3 coord_B = g_GridCenterListInput[interpol_B];
+				}
+				else{
+					m_current_position = agent.current_position;
+					//float3(agentList[agent_Id].current_position_x, agentList[agent_Id].current_position_y, 
+					//agentList[agent_Id].current_position_z);
+				}
+				uint interpol_B = pathList[offset + (interpol_id + 1)];
+				float3 coord_B = g_GridCenterListInput[interpol_B];
 
-			float temp_distance = distance(m_current_position, coord_B);
+					float temp_distance = distance(m_current_position, coord_B);
 
-			if (CUBE_SIZE * 0.5 > temp_distance && interpol_id + 2 < agent.pathCount){
-				interpol_id = interpol_id + 1;
-				agentList[agent_Id].currentInterpolationId = interpol_id;
-				interpol_B = pathList[offset + (interpol_id + 1)];
-				coord_B = g_GridCenterListInput[interpol_B];
-			}
-			float3 temp = coord_B - m_current_position;
-			
-			float3 prefVelocity = normalize(temp) * agent.velocity;
-			
-			int hash_index = floor(agent.current_position.x / CUBE_SIZE) +
-			MAP_DIMENSIONS *(floor(agent.current_position.z / CUBE_SIZE));
+				if (CUBE_SIZE * 0.5 > temp_distance && interpol_id + 2 < agent.pathCount){
+					interpol_id = interpol_id + 1;
+					agentList[agent_Id].currentInterpolationId = interpol_id;
+					interpol_B = pathList[offset + (interpol_id + 1)];
+					coord_B = g_GridCenterListInput[interpol_B];
+				}
+				float3 temp = coord_B - m_current_position;
 
-			bool isCollision = false;
+					float3 prefVelocity = normalize(temp) * agent.velocity;
 
-			uint num_neighbours = SpatialIndexTableBuffer.Load(hash_index*UINT_SIZE);
-			int index_agent_offset = (hash_index * NUM_AGENTS_PER_BLOCK);
-			for (uint i = 0; i < num_neighbours; i++)
-			{
-				int index_agent = index_agent_offset + i;
-				int agent_id_neighbour = SpatialAgentIdTableBuffer[index_agent];
+					int hash_index = floor(agent.current_position.x / CUBE_SIZE) +
+					MAP_DIMENSIONS *(floor(agent.current_position.z / CUBE_SIZE));
 
-				if (agent_id_neighbour != agent_Id){
-					float dist = distance(m_current_position, agentList[agent_id_neighbour].current_position);
+				bool isCollision = false;
 
-					if (dist < agent_radius)
-					{
-						isCollision = true;
+				uint num_neighbours = SpatialIndexTableBuffer.Load(hash_index*UINT_SIZE);
+				int index_agent_offset = (hash_index * NUM_AGENTS_PER_BLOCK);
+				for (uint i = 0; i < num_neighbours; i++)
+				{
+					int index_agent = index_agent_offset + i;
+					int agent_id_neighbour = SpatialAgentIdTableBuffer[index_agent];
+
+					if (agent_id_neighbour != agent_Id){
+						float dist = distance(m_current_position, agentList[agent_id_neighbour].current_position);
+
+						if (dist < agent_radius)
+						{
+							isCollision = true;
+						}
 					}
 				}
-			}
 
-			//(Agent m_pOwner, float agent_radius, int num_neighbours, int index_agent_offset, float2 prefVelocity, bool isCollison, float _timeStep)
+				//(Agent m_pOwner, float agent_radius, int num_neighbours, int index_agent_offset, float2 prefVelocity, bool isCollison, float _timeStep)
 
-			float2 simulated_velocity = simulateNewVelocity(agent, agent_radius, num_neighbours, index_agent_offset, prefVelocity.xz, isCollision, frameTime);
+				float2 simulated_velocity = simulateNewVelocity(agent_Id, agent, agent_radius, num_neighbours, index_agent_offset, prefVelocity.xz, isCollision, frameTime);
 
-			//m_current_position += normalize(temp) * agent.velocity * frameTime;
+					//m_current_position += normalize(temp) * agent.velocity * frameTime;
 
-			m_current_position += float3(simulated_velocity.x * frameTime, 0.0, simulated_velocity.y * frameTime);
+					m_current_position += float3(simulated_velocity.x * frameTime, 0.0, simulated_velocity.y * frameTime);
 
-			agentList[agent_Id].current_position = m_current_position; 
-		
-			bufferOut[agent_Id] = float3(m_current_position.x + agent.randomFactor_X,
-				coord_B.y, m_current_position.z + agent.randomFactor_Z);
+				agentList[agent_Id].current_position = m_current_position;
 
+				bufferOut[agent_Id] = float3(m_current_position.x + agent.randomFactor_X,
+					coord_B.y, m_current_position.z + agent.randomFactor_Z);
+
+		}
 	}
 
 	/*	if (interpol_id + 1 < agent.pathCount){

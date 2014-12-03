@@ -56,6 +56,8 @@ bool MultiAgentDrawClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* 
 
 	m_computeshader_helper->CreateStructuredBuffer(device, sizeof(XMFLOAT3), NUM_AGENTS, nullptr, &m_Buffer_AgentCurrentPosition);
 
+	m_computeshader_helper->CreateStructuredBuffer(device, sizeof(XMFLOAT2), 252, nullptr, &m_Buffer_PsudoRandom);
+
 	m_computeshader_helper->CreateVertexBuffer(device, sizeof(XMFLOAT3), NUM_AGENTS, nullptr, &m_AgentPositionDrawBuffer);
 
 	/** Create a Raw Buffer for Spatial Hash Table*******************************/
@@ -88,6 +90,8 @@ bool MultiAgentDrawClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* 
 	m_computeshader_helper->CreateBufferUAV(device, m_buffer_spatial_index_table, &m_view_spatial_index_table_URV);
 
 	m_computeshader_helper->CreateBufferUAV(device, m_buffer_spatial_agent_id_table, &m_view_spatial_agent_id_URV);
+
+	m_computeshader_helper->CreateBufferUAV(device, m_Buffer_PsudoRandom, &m_view_psudo_random_URV);
 	///////////////////////////////////////////////////////////////////////////////////
 	// Load Texture for Floor and other stuff
 	m_FloorTextureSRV = m_ShaderUtility->CreateTextureFromFile(device, L"Textures/edited_floor.dds");
@@ -639,18 +643,19 @@ void MultiAgentDrawClass::RenderComputeShader(ID3D11Device* device, ID3D11Device
 	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, XMFLOAT3 camEyePos,
 	ID3D11UnorderedAccessView*  m_BufRenderAgentList_URV, ID3D11UnorderedAccessView*  m_BufRenderAgentPathList_URV)
 {
+	bool debug = true;
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// Dispatch ComputeShader
 
 	ID3D11ShaderResourceView* aRViews[1] = { m_FloorCenterDataSRV };
 
-	ID3D11UnorderedAccessView* aURViews[6] = { m_view_AgentPosition_URV, m_BufRenderAgentList_URV,
+	ID3D11UnorderedAccessView* aURViews[7] = { m_view_AgentPosition_URV, m_BufRenderAgentList_URV,
 		m_BufRenderAgentPathList_URV, m_view_AgentCurrentPosition_URV, m_view_spatial_index_table_URV,
-		m_view_spatial_agent_id_URV };
+		m_view_spatial_agent_id_URV, m_view_psudo_random_URV };
 	// Now render the prepared buffers with the shader.
 	//deviceContext->CSSetConstantBuffers(0, 1, &m_BufConstantParameters);
 	deviceContext->CSSetShaderResources(0, 1, aRViews);
-	deviceContext->CSSetUnorderedAccessViews(0, 6, aURViews, nullptr);
+	deviceContext->CSSetUnorderedAccessViews(0, 7, aURViews, nullptr);
 	deviceContext->CSSetShader(m_computeShader, nullptr, 0);
 
 	deviceContext->Dispatch(2, 2, 1);
@@ -667,32 +672,64 @@ void MultiAgentDrawClass::RenderComputeShader(ID3D11Device* device, ID3D11Device
 	deviceContext->CSSetConstantBuffers(0, 1, ppCBnullptr);
 	/////////////////////////////////////////////////////////////////////////////////////
 	///// Check Output
+	if (debug){
+		//ID3D11Buffer* debugbuf2 = m_computeshader_helper->CreateAndCopyToDebugBuf(device, deviceContext, m_AgentPositionBuffer);
+		//D3D11_MAPPED_SUBRESOURCE MappedResource2;
+		//XMFLOAT3 *gridNodeListGPU;
+		//deviceContext->Map(debugbuf2, 0, D3D11_MAP_READ, 0, &MappedResource2);
 
-	//ID3D11Buffer* debugbuf2 = m_computeshader_helper->CreateAndCopyToDebugBuf(device, deviceContext, m_AgentPositionBuffer);
-	//D3D11_MAPPED_SUBRESOURCE MappedResource2;
-	//XMFLOAT3 *gridNodeListGPU;
-	//deviceContext->Map(debugbuf2, 0, D3D11_MAP_READ, 0, &MappedResource2);
+		//// Set a break point here and put down the expression "p, 1024" in your watch window to see what has been written out by our CS
+		//// This is also a common trick to debug CS programs.
+		//gridNodeListGPU = (XMFLOAT3*)MappedResource2.pData;
 
-	//// Set a break point here and put down the expression "p, 1024" in your watch window to see what has been written out by our CS
-	//// This is also a common trick to debug CS programs.
-	//gridNodeListGPU = (XMFLOAT3*)MappedResource2.pData;
+		//cout << " Center Map:\n";
 
-	//cout << " Center Map:\n";
+		//XMFLOAT3 nodes2[65];
+		//for (int i = 0; i < 64; i++)
+		//{
+		//	nodes2[i] = gridNodeListGPU[i];
 
-	//XMFLOAT3 nodes2[65];
-	//for (int i = 0; i < 64; i++)
-	//{
-	//	nodes2[i] = gridNodeListGPU[i];
-
-	//	cout << i << ":X= " << gridNodeListGPU[i].x << "Y=" << gridNodeListGPU[i].y << " Z=" <<
-	//		gridNodeListGPU[i].z << "\n";
-	//}
-	//deviceContext->Unmap(debugbuf2, 0);
-
-	//debugbuf2->Release();
-	//debugbuf2 = 0;
+		//	cout << i << ":X= " << gridNodeListGPU[i].x << "Y=" << gridNodeListGPU[i].y << " Z=" <<
+		//		gridNodeListGPU[i].z << "\n";
+		//}
+		//deviceContext->Unmap(debugbuf2, 0);
+		//debugbuf2->Release();
+		//debugbuf2 = 0;
 
 
+		/// Test Random Data Buffer
+		Log::Logger logger("RenderComputeShader:");
+		ID3D11Buffer* debugbuf2 = m_computeshader_helper->CreateAndCopyToDebugBuf(device, deviceContext, m_Buffer_PsudoRandom);
+		D3D11_MAPPED_SUBRESOURCE MappedResource2;
+		XMFLOAT2 *gridNodeListGPU;
+		deviceContext->Map(debugbuf2, 0, D3D11_MAP_READ, 0, &MappedResource2);
+
+		// Set a break point here and put down the expression "p, 1024" in your watch window to see what has been written out by our CS
+		// This is also a common trick to debug CS programs.
+		gridNodeListGPU = (XMFLOAT2*)MappedResource2.pData;
+
+	
+		int const MAX = 252;
+		logger.debug() << " Random Samples for Agent:" << std::to_string(gridNodeListGPU[0].x) <<
+			" Seed:" << std::to_string(gridNodeListGPU[0].y) << "******:\n";
+
+		for (int i = 0; i < MAX; i++)
+		{
+			//nodes2[i] = spatialIndexTableGPU[i*NUM_AGENTS_PER_BLOCK];
+
+			std::string result = "";
+			
+
+			logger.debug() << "SampleId:" << i << "| x:" << std::to_string(gridNodeListGPU[i].x) << 
+				"| y:" << std::to_string(gridNodeListGPU[i].y) << "|";
+		}
+
+		deviceContext->Unmap(debugbuf2, 0);
+
+		debugbuf2->Release();
+		debugbuf2 = 0;
+
+	}
 }
 void MultiAgentDrawClass::RenderMultipleAgentShader(ID3D11Device* device, ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix,
 	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, XMFLOAT3 camEyePos)

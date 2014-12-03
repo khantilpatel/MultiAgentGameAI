@@ -37,20 +37,22 @@ void main(uint3 DTid : SV_DispatchThreadID)
 {
 	
 	uint gridId = ((NUM_THREAD_X * NUM_GRID_BLOCK_X) * DTid.y) + DTid.x;
-	uint offset = gridId * (MAP_DIMENSIONS * MAP_DIMENSIONS);
-	// For testing take this i manually later make according DispatchId
-	uint agent_Id = gridId;
+	if (gridId == 0 || gridId == 1 || gridId == 2 || gridId == 3){
+		uint offset = gridId * (MAP_DIMENSIONS * MAP_DIMENSIONS);
+		// For testing take this i manually later make according DispatchId
+		uint agent_Id = gridId;
 
-	float3 m_current_position = float3(0.0, 0.0, 0.0);
-	Agent agent = agentList[agent_Id];
+		float3 m_current_position = float3(0.0, 0.0, 0.0);
+			Agent agent = agentList[agent_Id];
 
-	int hash_index = floor(agent.current_position.x / CUBE_SIZE) +
-		MAP_DIMENSIONS *(floor(agent.current_position.z / CUBE_SIZE));
+		int hash_index = floor(agent.current_position.x / CUBE_SIZE) +
+			MAP_DIMENSIONS *(floor(agent.current_position.z / CUBE_SIZE));
 
-	int agent_hash_index;
-	SpatialIndexTableBuffer.InterlockedAdd(hash_index*UINT_SIZE, 1, agent_hash_index);
+		int agent_hash_index;
+		SpatialIndexTableBuffer.InterlockedAdd(hash_index*UINT_SIZE, 1, agent_hash_index);
 
-	if (agent_hash_index < NUM_AGENTS_PER_BLOCK){
-		SpatialAgentIdTableBuffer[(hash_index*NUM_AGENTS_PER_BLOCK) + agent_hash_index] = agent_Id;
+		if (agent_hash_index < NUM_AGENTS_PER_BLOCK){
+			SpatialAgentIdTableBuffer[(hash_index*NUM_AGENTS_PER_BLOCK) + agent_hash_index] = agent_Id;
+		}
 	}
 }

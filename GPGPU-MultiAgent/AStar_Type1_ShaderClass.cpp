@@ -192,8 +192,8 @@ bool AStar_Type1_ShaderClass::createConstantBuffer(ID3D11Device* device, ID3D11D
 	agentRender.velocity = VELOCITY; // generate random value for velocity TODO: find the random value range
 	agentRender.randomFactor_X = 0; //RandomFloat(randomFactor_Min, randomFactor_Max);
 	agentRender.randomFactor_Y = 0;//RandomFloat(randomFactor_Min, randomFactor_Max);
-	//agentRenderList[agentsCount] = agentRender;
-	//agentsCount = agentsCount + 1;
+	agentRenderList[agentsCount] = agentRender;
+	agentsCount = agentsCount + 1;
 
 	// Agent 1: 	
 	sourceNode.x1 = 2;
@@ -212,20 +212,20 @@ bool AStar_Type1_ShaderClass::createConstantBuffer(ID3D11Device* device, ID3D11D
 	agentsCount = agentsCount + 1;
 
 	//// Agent 2: 	
-	//sourceNode.x1 = 2;
-	//sourceNode.y1 = 2;
+	sourceNode.x1 = 2;
+	sourceNode.y1 = 2;
 
-	//targetNode.x1 = 0;
-	//targetNode.y1 = 0;
-	//a1.sourceLoc = sourceNode;
-	//a1.targetLoc = targetNode;
+	targetNode.x1 = 0;
+	targetNode.y1 = 0;
+	a1.sourceLoc = sourceNode;
+	a1.targetLoc = targetNode;
 
-	//agentList[agentsCount] = a1;
-	//agentRender.sourceLoc = sourceNode;
-	//agentRender.agentId = agentsCount;
-	//agentRender.seed = agentsCount;
-	//agentRenderList[agentsCount] = agentRender;
-	//agentsCount = agentsCount + 1;
+	agentList[agentsCount] = a1;
+	agentRender.sourceLoc = sourceNode;
+	agentRender.agentId = agentsCount;
+	agentRender.seed = rand();
+	agentRenderList[agentsCount] = agentRender;
+	agentsCount = agentsCount + 1;
 
 	// Agent 3: 	
 	sourceNode.x1 = 0;
