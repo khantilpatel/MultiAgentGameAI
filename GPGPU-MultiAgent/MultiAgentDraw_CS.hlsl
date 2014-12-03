@@ -27,6 +27,7 @@ struct Agent
 	float randomFactor_X;
 	float randomFactor_Z;
 	uint seed;
+	float2 velocity_dir;
 	//uint type; // Type: 0 Agent; 1 Collision box
 };
 struct Node{
@@ -67,9 +68,9 @@ RWStructuredBuffer<float2> testRandomSample: register(u6);
 
 #define m_sampleCountDefault 250
 #define m_prefSpeedDefault 0.5
-#define m_maxSpeedDefault 1
-#define m_safetyFactorDefault 20.5
-#define m_maxAccelDefault 1
+#define m_maxSpeedDefault 0.8
+#define m_safetyFactorDefault 0.001
+#define m_maxAccelDefault 0.1
 
 float absSq(float2 q)
 {
@@ -227,13 +228,13 @@ float2 simulateNewVelocity(int agent_Id, Agent m_pOwner, float agent_radius, int
 				Agent other = agentList[agent_id_neighbour];
 
 				//TODO: Test this explicitly
-				Vab = 2.0f * vCand - m_pOwner.current_position.xy - other.current_position.xy;
+				Vab = 2.0f * vCand - m_pOwner.velocity_dir - other.velocity_dir;
 
 				float time =
 					computeTimeToCollison(
-					m_pOwner.current_position.xy,
+					m_pOwner.current_position.xz,
 					Vab,
-					other.current_position.xy,
+					other.current_position.xz,
 					agent_radius + agent_radius,
 					isCollison);
 
@@ -264,7 +265,7 @@ float2 simulateNewVelocity(int agent_Id, Agent m_pOwner, float agent_radius, int
 	}
 
 	if (m_pOwner.agentId == 0){
-		testRandomSample[251] = return_final_velocity;
+		testRandomSample[251] = float2(m_pOwner.agentId, agent_Id);//return_final_velocity;
 	}
 
 	agentList[m_pOwner.agentId].seed = new_seed;
@@ -355,7 +356,8 @@ void main(uint3 DTid : SV_DispatchThreadID)
 					m_current_position += float3(simulated_velocity.x * frameTime, 0.0, simulated_velocity.y * frameTime);
 
 				agentList[agent_Id].current_position = m_current_position;
-
+				agentList[agent_Id].velocity_dir = simulated_velocity;
+				
 				bufferOut[agent_Id] = float3(m_current_position.x + agent.randomFactor_X,
 					coord_B.y, m_current_position.z + agent.randomFactor_Z);
 

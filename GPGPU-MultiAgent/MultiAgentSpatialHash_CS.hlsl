@@ -14,6 +14,7 @@ struct Agent
 	float randomFactor_X;
 	float randomFactor_Z;
 	uint seed;
+	float2 velocity_dir;
 	//uint type; // Type: 0 Agent; 1 Collision box
 };
 

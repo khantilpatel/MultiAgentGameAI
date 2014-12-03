@@ -180,19 +180,22 @@ bool AStar_Type1_ShaderClass::createConstantBuffer(ID3D11Device* device, ID3D11D
 	a1.sourceLoc = sourceNode;
 	a1.targetLoc = targetNode;
 		
-	a1.id = agentsCount;
-	agentList[agentsCount] = a1;
+	
+	
 	agentRender.isFirstPass = 0;
 	agentRender.agentId = agentsCount;
+	a1.id = agentsCount;
 	agentRender.sourceLoc = sourceNode;
 	agentRender.currentInterpolationId = 0;
 	agentRender.pathCount = 0;
 	agentRender.status = 0;
 	agentRender.seed = rand();
 	agentRender.velocity = VELOCITY; // generate random value for velocity TODO: find the random value range
+	agentRender.velocity_dir = XMFLOAT2(0.0f,0.0f);
 	agentRender.randomFactor_X = 0; //RandomFloat(randomFactor_Min, randomFactor_Max);
 	agentRender.randomFactor_Y = 0;//RandomFloat(randomFactor_Min, randomFactor_Max);
 	agentRenderList[agentsCount] = agentRender;
+	agentList[agentsCount] = a1;
 	agentsCount = agentsCount + 1;
 
 	// Agent 1: 	
@@ -204,11 +207,13 @@ bool AStar_Type1_ShaderClass::createConstantBuffer(ID3D11Device* device, ID3D11D
 	a1.sourceLoc = sourceNode;
 	a1.targetLoc = targetNode;
 
-	agentList[agentsCount] = a1;
+	
 	agentRender.sourceLoc = sourceNode;
 	agentRender.agentId = agentsCount;
+	a1.id = agentsCount;
 	agentRender.seed = rand();
 	agentRenderList[agentsCount] = agentRender;
+	agentList[agentsCount] = a1;
 	agentsCount = agentsCount + 1;
 
 	//// Agent 2: 	
@@ -220,11 +225,13 @@ bool AStar_Type1_ShaderClass::createConstantBuffer(ID3D11Device* device, ID3D11D
 	a1.sourceLoc = sourceNode;
 	a1.targetLoc = targetNode;
 
-	agentList[agentsCount] = a1;
+	
 	agentRender.sourceLoc = sourceNode;
 	agentRender.agentId = agentsCount;
+	a1.id = agentsCount;
 	agentRender.seed = rand();
 	agentRenderList[agentsCount] = agentRender;
+	agentList[agentsCount] = a1;
 	agentsCount = agentsCount + 1;
 
 	// Agent 3: 	
@@ -236,11 +243,13 @@ bool AStar_Type1_ShaderClass::createConstantBuffer(ID3D11Device* device, ID3D11D
 	a1.sourceLoc = sourceNode;
 	a1.targetLoc = targetNode;
 
-	agentList[agentsCount] = a1;
+	
 	agentRender.sourceLoc = sourceNode;
 	agentRender.agentId = agentsCount;
+	a1.id = agentsCount;
 	agentRender.seed = rand();
 	agentRenderList[agentsCount] = agentRender;
+	agentList[agentsCount] = a1;
 	agentsCount = agentsCount + 1;
 
 	//*** Init 3200 Agents*********************************************/

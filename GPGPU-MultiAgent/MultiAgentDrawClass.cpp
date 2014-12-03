@@ -496,7 +496,7 @@ void MultiAgentDrawClass::RenderComputeSpatialHashShader(ID3D11Device* device, I
 	deviceContext->CopyResource(m_buffer_spatial_index_table, m_buffer_spatial_index_table_reset);
 
 	deviceContext->CopyResource(m_buffer_spatial_agent_id_table, m_buffer_spatial_agent_id_table_reset);
-	bool debug = false;
+	bool debug = true;
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// Dispatch ComputeShader
 	if (debug){
@@ -643,7 +643,7 @@ void MultiAgentDrawClass::RenderComputeShader(ID3D11Device* device, ID3D11Device
 	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, XMFLOAT3 camEyePos,
 	ID3D11UnorderedAccessView*  m_BufRenderAgentList_URV, ID3D11UnorderedAccessView*  m_BufRenderAgentPathList_URV)
 {
-	bool debug = true;
+	bool debug = false;
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// Dispatch ComputeShader
 

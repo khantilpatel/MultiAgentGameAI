@@ -135,6 +135,7 @@ public:
 		float randomFactor_X;
 		float randomFactor_Y;
 		UINT seed;
+		XMFLOAT2 velocity_dir;
 	};
 
 	// Render Related Variables
