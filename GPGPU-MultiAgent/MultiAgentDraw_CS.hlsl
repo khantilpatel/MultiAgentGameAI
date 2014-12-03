@@ -59,18 +59,18 @@ RWStructuredBuffer<float2> testRandomSample: register(u6);
 #define NUM_GRID_BLOCK_X 2
 #define MAP_DIMENSIONS 8
 #define CUBE_SIZE 2.5 // Width/height in pixel?
-#define NUM_AGENTS_PER_BLOCK 5
+#define NUM_AGENTS_PER_BLOCK 10
 #define AGENT_WIDTH 0.3
 #define UINT_SIZE 4
 //#define INFINITY +INF
 
 #define RVO_INFTY 9e9f
 
-#define m_sampleCountDefault 250
+#define m_sampleCountDefault 500
 #define m_prefSpeedDefault 0.5
-#define m_maxSpeedDefault 0.8
-#define m_safetyFactorDefault 0.001
-#define m_maxAccelDefault 0.1
+#define m_maxSpeedDefault 0.5
+#define m_safetyFactorDefault 0.6
+#define m_maxAccelDefault 0.3
 
 float absSq(float2 q)
 {
@@ -280,7 +280,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 {
 	uint gridId = ((NUM_THREAD_X * NUM_GRID_BLOCK_X) * DTid.y) + DTid.x;
 	//int agentId[20];
-	if (gridId == 0 || gridId == 1 || gridId == 2 || gridId == 3){
+	if (gridId == 0 || gridId == 1 || gridId == 2 || gridId == 3 || gridId == 4 || gridId == 5){
 		float agent_radius = sqrt((AGENT_WIDTH*AGENT_WIDTH) + (AGENT_WIDTH*AGENT_WIDTH));
 
 		uint offset = gridId * (MAP_DIMENSIONS * MAP_DIMENSIONS);
@@ -315,7 +315,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 
 					float temp_distance = distance(m_current_position, coord_B);
 
-				if (CUBE_SIZE * 0.5 > temp_distance && interpol_id + 2 < agent.pathCount){
+				if (CUBE_SIZE  > temp_distance && interpol_id + 2 < agent.pathCount){
 					interpol_id = interpol_id + 1;
 					agentList[agent_Id].currentInterpolationId = interpol_id;
 					interpol_B = pathList[offset + (interpol_id + 1)];
@@ -340,7 +340,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 					if (agent_id_neighbour != agent_Id){
 						float dist = distance(m_current_position, agentList[agent_id_neighbour].current_position);
 
-						if (dist < agent_radius)
+						if (dist < agent_radius + agent_radius)
 						{
 							isCollision = true;
 						}

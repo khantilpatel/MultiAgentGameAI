@@ -29,7 +29,7 @@ RWStructuredBuffer<Agent> agentList: register(u2);
 #define MAP_DIMENSIONS 8
 #define CUBE_SIZE 2.5 // Width/height in pixel?
 #define UINT_SIZE 4
-#define NUM_AGENTS_PER_BLOCK 5
+#define NUM_AGENTS_PER_BLOCK 10
 
 groupshared int shared_data[MAP_DIMENSIONS*MAP_DIMENSIONS];
 
@@ -38,7 +38,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 {
 	
 	uint gridId = ((NUM_THREAD_X * NUM_GRID_BLOCK_X) * DTid.y) + DTid.x;
-	if (gridId == 0 || gridId == 1 || gridId == 2 || gridId == 3){
+	if (gridId == 0 || gridId == 1 || gridId == 2 || gridId == 3 || gridId == 4 || gridId == 5){
 		uint offset = gridId * (MAP_DIMENSIONS * MAP_DIMENSIONS);
 		// For testing take this i manually later make according DispatchId
 		uint agent_Id = gridId;
