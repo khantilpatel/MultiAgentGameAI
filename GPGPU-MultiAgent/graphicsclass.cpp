@@ -27,6 +27,8 @@ GraphicsClass::GraphicsClass()
 	toggle_WireFrame_Mode = false;
 	executeOnceAStar_Type1 = true;
 
+	frame_count = 0;
+
 }
 
 
@@ -252,7 +254,7 @@ bool GraphicsClass::Render()
 	// RENDER Multi Agent Display
 	/////////////////////////////////////////////////////////////////////
 	m_MultiAgentDrawClass->Render(m_D3D->GetDevice(),m_D3D->GetDeviceContext(), worldMatrix, viewMatrix,
-	projectionMatrix, m_frameTime / 1000, m_TotalTime / 1000, m_Camera->GetPosition_XM(),
+		projectionMatrix, m_frameTime / 1000, m_TotalTime / 1000, frame_count, m_Camera->GetPosition_XM(),
 	m_AStar_Type1_ShaderClass->m_BufRenderAgentList_URV, m_AStar_Type1_ShaderClass->m_BufRenderAgentPathList_URV);
 
 		///////////////////////////////////////////////////////////////////////////////
@@ -332,7 +334,7 @@ bool GraphicsClass::Render()
 
 	// Present the rendered scene to the screen.
 	m_D3D->EndScene();
-
+	frame_count++;
 	return true;
 }
 

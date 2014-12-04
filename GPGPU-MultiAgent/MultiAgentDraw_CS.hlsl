@@ -66,11 +66,11 @@ RWStructuredBuffer<float2> testRandomSample: register(u6);
 
 #define RVO_INFTY 9e9f
 
-#define m_sampleCountDefault 500
-#define m_prefSpeedDefault 0.5
+#define m_sampleCountDefault 250
+#define m_prefSpeedDefault 0.3
 #define m_maxSpeedDefault 0.5
-#define m_safetyFactorDefault 0.6
-#define m_maxAccelDefault 0.3
+#define m_safetyFactorDefault 0.001 // Worked 0.33
+#define m_maxAccelDefault 0.1
 
 float absSq(float2 q)
 {
@@ -123,7 +123,7 @@ float computeTimeToCollison(float2 p, float2 v, float2 p2, float radius, bool co
 
 float2 simulateNewVelocity(int agent_Id, Agent m_pOwner, float agent_radius, int num_neighbours, int index_agent_offset, float2 prefVelocity, bool isCollison, float _timeStep)
 {
-	float2 return_final_velocity;
+	float2 return_final_velocity ;
 
 	uint N = 32768;
 	uint P1 = 1103515245;
@@ -270,7 +270,19 @@ float2 simulateNewVelocity(int agent_Id, Agent m_pOwner, float agent_radius, int
 
 	agentList[m_pOwner.agentId].seed = new_seed;
 
-	return return_final_velocity;
+	float2 final_velocity;
+
+	float dv = abs(return_final_velocity - m_pOwner.velocity_dir);
+	if (dv < m_maxAccelDefault * _timeStep) {
+		final_velocity = return_final_velocity;
+	}
+	else {
+		final_velocity = (1 - (m_maxAccelDefault * _timeStep / dv)) *  m_pOwner.velocity_dir + (m_maxAccelDefault * _timeStep / dv) * return_final_velocity;
+	}
+
+	agentList[m_pOwner.agentId].velocity_dir = final_velocity;
+
+	return final_velocity;
 
 }
 
@@ -281,7 +293,9 @@ void main(uint3 DTid : SV_DispatchThreadID)
 	uint gridId = ((NUM_THREAD_X * NUM_GRID_BLOCK_X) * DTid.y) + DTid.x;
 	//int agentId[20];
 	if (gridId == 0 || gridId == 1 || gridId == 2 || gridId == 3 || gridId == 4 || gridId == 5){
-		float agent_radius = sqrt((AGENT_WIDTH*AGENT_WIDTH) + (AGENT_WIDTH*AGENT_WIDTH));
+
+		float agent_half_width = AGENT_WIDTH / 2;
+		float agent_radius = sqrt((sqr(agent_half_width)) + sqr(agent_half_width));
 
 		uint offset = gridId * (MAP_DIMENSIONS * MAP_DIMENSIONS);
 		// For testing take this i manually later make according DispatchId
@@ -323,7 +337,9 @@ void main(uint3 DTid : SV_DispatchThreadID)
 				}
 				float3 temp = coord_B - m_current_position;
 
-					float3 prefVelocity = normalize(temp) * agent.velocity;
+				float distSq2subgoal = absSq(temp);
+
+				float3 prefVelocity = (temp * m_prefSpeedDefault) / sqrt(distSq2subgoal);
 
 					int hash_index = floor(agent.current_position.x / CUBE_SIZE) +
 					MAP_DIMENSIONS *(floor(agent.current_position.z / CUBE_SIZE));
@@ -340,7 +356,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 					if (agent_id_neighbour != agent_Id){
 						float dist = distance(m_current_position, agentList[agent_id_neighbour].current_position);
 
-						if (dist < agent_radius + agent_radius)
+						if (dist < AGENT_WIDTH *3)// agent_radius)
 						{
 							isCollision = true;
 						}
@@ -349,7 +365,7 @@ void main(uint3 DTid : SV_DispatchThreadID)
 
 				//(Agent m_pOwner, float agent_radius, int num_neighbours, int index_agent_offset, float2 prefVelocity, bool isCollison, float _timeStep)
 
-				float2 simulated_velocity = simulateNewVelocity(agent_Id, agent, agent_radius, num_neighbours, index_agent_offset, prefVelocity.xz, isCollision, frameTime);
+				float2 simulated_velocity = simulateNewVelocity(agent_Id, agent, AGENT_WIDTH * 3, num_neighbours, index_agent_offset, prefVelocity.xz, isCollision, frameTime);
 
 					//m_current_position += normalize(temp) * agent.velocity * frameTime;
 

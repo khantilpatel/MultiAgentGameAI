@@ -50,6 +50,7 @@ public:
 	float m_TotalTime;
 	bool toggle_WireFrame_Mode;
 	bool executeOnceAStar_Type1;
+	int frame_count;
 private:
 	bool Render();
 

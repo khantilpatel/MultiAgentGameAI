@@ -56,10 +56,10 @@ class MultiAgentDrawClass
 
 	
 public:
-	static const int NUM_AGENTS = 6;
+	static const int NUM_AGENTS = 4;
 	static const int NUM_AGENTS_PER_BLOCK = 10;
 	static const int MAP_DIMENSIONS = 8;
-
+	int frameCount;
 	
 
 	MultiAgentDrawClass();
@@ -71,7 +71,7 @@ public:
 
 	bool Render(ID3D11Device* device, ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix,
 		D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix,
-		float frameTime, float gameTime, XMFLOAT3 camEyePos,
+		float frameTime, float gameTime, int framecount, XMFLOAT3 camEyePos,
 		ID3D11UnorderedAccessView*, ID3D11UnorderedAccessView*);
 
 

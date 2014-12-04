@@ -157,7 +157,7 @@ bool AStar_Type1_ShaderClass::createConstantBuffer(ID3D11Device* device, ID3D11D
 
 	//	g_vBuf1[i].f = (float)i;
 	//}
-	float VELOCITY = 0.5;
+	float VELOCITY = 0.3;
 	float randomFactor_Min = -1;
 	float randomFactor_Max = 1;
 
@@ -199,22 +199,22 @@ bool AStar_Type1_ShaderClass::createConstantBuffer(ID3D11Device* device, ID3D11D
 	agentsCount = agentsCount + 1;
 
 	// Agent 1: 	
-	sourceNode.x1 = 2;
-	sourceNode.y1 = 0;
+	//sourceNode.x1 = 2;
+	//sourceNode.y1 = 0;
 
-	targetNode.x1 = 0;
-	targetNode.y1 = 2;
-	a1.sourceLoc = sourceNode;
-	a1.targetLoc = targetNode;
+	//targetNode.x1 = 0;
+	//targetNode.y1 = 2;
+	//a1.sourceLoc = sourceNode;
+	//a1.targetLoc = targetNode;
 
-	
-	agentRender.sourceLoc = sourceNode;
-	agentRender.agentId = agentsCount;
-	a1.id = agentsCount;
-	agentRender.seed = rand();
-	agentRenderList[agentsCount] = agentRender;
-	agentList[agentsCount] = a1;
-	agentsCount = agentsCount + 1;
+	//
+	//agentRender.sourceLoc = sourceNode;
+	//agentRender.agentId = agentsCount;
+	//a1.id = agentsCount;
+	//agentRender.seed = rand();
+	//agentRenderList[agentsCount] = agentRender;
+	//agentList[agentsCount] = a1;
+	//agentsCount = agentsCount + 1;
 
 	//// Agent 2: 	
 	sourceNode.x1 = 2;
@@ -235,58 +235,58 @@ bool AStar_Type1_ShaderClass::createConstantBuffer(ID3D11Device* device, ID3D11D
 	agentsCount = agentsCount + 1;
 
 	// Agent 3: 	
-	sourceNode.x1 = 0;
-	sourceNode.y1 = 2;
+	//sourceNode.x1 = 0;
+	//sourceNode.y1 = 2;
 
-	targetNode.x1 = 2;
-	targetNode.y1 = 0;
-	a1.sourceLoc = sourceNode;
-	a1.targetLoc = targetNode;
+	//targetNode.x1 = 2;
+	//targetNode.y1 = 0;
+	//a1.sourceLoc = sourceNode;
+	//a1.targetLoc = targetNode;
 
-	
-	agentRender.sourceLoc = sourceNode;
-	agentRender.agentId = agentsCount;
-	a1.id = agentsCount;
-	agentRender.seed = rand();
-	agentRenderList[agentsCount] = agentRender;
-	agentList[agentsCount] = a1;
-	agentsCount = agentsCount + 1;
+	//
+	//agentRender.sourceLoc = sourceNode;
+	//agentRender.agentId = agentsCount;
+	//a1.id = agentsCount;
+	//agentRender.seed = rand();
+	//agentRenderList[agentsCount] = agentRender;
+	//agentList[agentsCount] = a1;
+	//agentsCount = agentsCount + 1;
 
-	// Agent 4: 	
-	sourceNode.x1 = 0;
-	sourceNode.y1 = 1;
+	//// Agent 4: 	
+	//sourceNode.x1 = 0;
+	//sourceNode.y1 = 1;
 
-	targetNode.x1 = 2;
-	targetNode.y1 = 1;
-	a1.sourceLoc = sourceNode;
-	a1.targetLoc = targetNode;
-
-
-	agentRender.sourceLoc = sourceNode;
-	agentRender.agentId = agentsCount;
-	a1.id = agentsCount;
-	agentRender.seed = rand();
-	agentRenderList[agentsCount] = agentRender;
-	agentList[agentsCount] = a1;
-	agentsCount = agentsCount + 1;
-
-	// Agent 5: 	
-	sourceNode.x1 = 2;
-	sourceNode.y1 = 1;
-
-	targetNode.x1 = 0;
-	targetNode.y1 = 1;
-	a1.sourceLoc = sourceNode;
-	a1.targetLoc = targetNode;
+	//targetNode.x1 = 2;
+	//targetNode.y1 = 1;
+	//a1.sourceLoc = sourceNode;
+	//a1.targetLoc = targetNode;
 
 
-	agentRender.sourceLoc = sourceNode;
-	agentRender.agentId = agentsCount;
-	a1.id = agentsCount;
-	agentRender.seed = rand();
-	agentRenderList[agentsCount] = agentRender;
-	agentList[agentsCount] = a1;
-	agentsCount = agentsCount + 1;
+	//agentRender.sourceLoc = sourceNode;
+	//agentRender.agentId = agentsCount;
+	//a1.id = agentsCount;
+	//agentRender.seed = rand();
+	//agentRenderList[agentsCount] = agentRender;
+	//agentList[agentsCount] = a1;
+	//agentsCount = agentsCount + 1;
+
+	//// Agent 5: 	
+	//sourceNode.x1 = 2;
+	//sourceNode.y1 = 1;
+
+	//targetNode.x1 = 0;
+	//targetNode.y1 = 1;
+	//a1.sourceLoc = sourceNode;
+	//a1.targetLoc = targetNode;
+
+
+	//agentRender.sourceLoc = sourceNode;
+	//agentRender.agentId = agentsCount;
+	//a1.id = agentsCount;
+	//agentRender.seed = rand();
+	//agentRenderList[agentsCount] = agentRender;
+	//agentList[agentsCount] = a1;
+	//agentsCount = agentsCount + 1;
 
 	//*** Init 3200 Agents*********************************************/
 	//

@@ -458,10 +458,11 @@ bool MultiAgentDrawClass::SetShaderParameters(ID3D11DeviceContext* deviceContext
 }
 
 bool MultiAgentDrawClass::Render(ID3D11Device* device, ID3D11DeviceContext* deviceContext, D3DXMATRIX worldMatrix,
-	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, float frameTime, float gameTime, XMFLOAT3 camEyePos,
+	D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, float frameTime, float gameTime, int frameCount, XMFLOAT3 camEyePos,
 	ID3D11UnorderedAccessView*  m_BufRenderAgentList_URV, ID3D11UnorderedAccessView*  m_BufRenderAgentPathList_URV)
 {
-	cout << "FireParticle:" << frameTime << "||" << gameTime << "||\n";
+	this->frameCount = frameCount;
+	cout << "FireParticle:" << frameTime << "||" << gameTime << "||" << frameCount << "||\n";
 	D3DXMATRIX worldMatrix1 = *(new D3DXMATRIX);
 
 	D3DXMatrixTranspose(&worldMatrix1, &worldMatrix);
@@ -496,7 +497,7 @@ void MultiAgentDrawClass::RenderComputeSpatialHashShader(ID3D11Device* device, I
 	deviceContext->CopyResource(m_buffer_spatial_index_table, m_buffer_spatial_index_table_reset);
 
 	deviceContext->CopyResource(m_buffer_spatial_agent_id_table, m_buffer_spatial_agent_id_table_reset);
-	bool debug = true;
+	bool debug = false;
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// Dispatch ComputeShader
 	if (debug){
@@ -509,7 +510,7 @@ void MultiAgentDrawClass::RenderComputeSpatialHashShader(ID3D11Device* device, I
 		//// This is also a common trick to debug CS programs.
 		//spatialIndexTableGPU = (int*)MappedResource2.pData;
 
-		//cout << " spatialIndexTableGPU before ******:\n";
+		//cout << " spatialIndexTableGPU before frame:"<< frameCount<< "******:\n";
 
 		//int nodes2[65];
 		//for (int i = 0; i < 64; i++)
@@ -614,7 +615,7 @@ void MultiAgentDrawClass::RenderComputeSpatialHashShader(ID3D11Device* device, I
 		// This is also a common trick to debug CS programs.
 		spatialAgentIdTableGPU = (int*)MappedResource2.pData;
 
-		logger.debug() << " spatialIndexTableGPU AgentId's After******:\n";
+		logger.debug() << " spatialIndexTableGPU AgentId's After frame:" << frameCount << "******:\n";
 
 		int nodes2[(MAP_DIMENSIONS*MAP_DIMENSIONS)*NUM_AGENTS_PER_BLOCK];
 		for (int i = 0; i < (MAP_DIMENSIONS*MAP_DIMENSIONS); i++)
@@ -711,7 +712,7 @@ void MultiAgentDrawClass::RenderComputeShader(ID3D11Device* device, ID3D11Device
 	
 		int const MAX = 252;
 		logger.debug() << " Random Samples for Agent:" << std::to_string(gridNodeListGPU[0].x) <<
-			" Seed:" << std::to_string(gridNodeListGPU[0].y) << "******:\n";
+			" Seed:" << std::to_string(gridNodeListGPU[0].y) << " frame:" << frameCount <<  "******:\n";
 
 		for (int i = 0; i < MAX; i++)
 		{
@@ -777,7 +778,7 @@ void MultiAgentDrawClass::RenderMultipleAgentShader(ID3D11Device* device, ID3D11
 	// Set the sampler state in the pixel shader.
 	//deviceContext->PSSetSamplers(0, 1, &m_sampleState);
 	////////////////////////////////////////////////////////////////////////////////////
-	deviceContext->Draw(3200, 0);
+	deviceContext->Draw(4,0);//3200, 0);
 
 	deviceContext->GSSetConstantBuffers(0, 1, bufferArray);
 	deviceContext->GSSetShader(NULL, NULL, 0);
