@@ -56,7 +56,7 @@ class MultiAgentDrawClass
 
 	
 public:
-	static const int NUM_AGENTS = 4;
+	static const int NUM_AGENTS = 8;
 	static const int NUM_AGENTS_PER_BLOCK = 10;
 	static const int MAP_DIMENSIONS = 8;
 	int frameCount;

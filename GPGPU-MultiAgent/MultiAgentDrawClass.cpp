@@ -778,7 +778,7 @@ void MultiAgentDrawClass::RenderMultipleAgentShader(ID3D11Device* device, ID3D11
 	// Set the sampler state in the pixel shader.
 	//deviceContext->PSSetSamplers(0, 1, &m_sampleState);
 	////////////////////////////////////////////////////////////////////////////////////
-	deviceContext->Draw(4,0);//3200, 0);
+	deviceContext->Draw(6,0);//3200, 0);
 
 	deviceContext->GSSetConstantBuffers(0, 1, bufferArray);
 	deviceContext->GSSetShader(NULL, NULL, 0);

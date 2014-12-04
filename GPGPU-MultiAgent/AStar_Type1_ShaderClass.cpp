@@ -199,29 +199,11 @@ bool AStar_Type1_ShaderClass::createConstantBuffer(ID3D11Device* device, ID3D11D
 	agentsCount = agentsCount + 1;
 
 	// Agent 1: 	
-	//sourceNode.x1 = 2;
-	//sourceNode.y1 = 0;
-
-	//targetNode.x1 = 0;
-	//targetNode.y1 = 2;
-	//a1.sourceLoc = sourceNode;
-	//a1.targetLoc = targetNode;
-
-	//
-	//agentRender.sourceLoc = sourceNode;
-	//agentRender.agentId = agentsCount;
-	//a1.id = agentsCount;
-	//agentRender.seed = rand();
-	//agentRenderList[agentsCount] = agentRender;
-	//agentList[agentsCount] = a1;
-	//agentsCount = agentsCount + 1;
-
-	//// Agent 2: 	
 	sourceNode.x1 = 2;
-	sourceNode.y1 = 2;
+	sourceNode.y1 = 0;
 
 	targetNode.x1 = 0;
-	targetNode.y1 = 0;
+	targetNode.y1 = 2;
 	a1.sourceLoc = sourceNode;
 	a1.targetLoc = targetNode;
 
@@ -234,11 +216,11 @@ bool AStar_Type1_ShaderClass::createConstantBuffer(ID3D11Device* device, ID3D11D
 	agentList[agentsCount] = a1;
 	agentsCount = agentsCount + 1;
 
-	// Agent 3: 	
-	//sourceNode.x1 = 0;
+	//// Agent 2: 	
+	//sourceNode.x1 = 2;
 	//sourceNode.y1 = 2;
 
-	//targetNode.x1 = 2;
+	//targetNode.x1 = 0;
 	//targetNode.y1 = 0;
 	//a1.sourceLoc = sourceNode;
 	//a1.targetLoc = targetNode;
@@ -252,42 +234,95 @@ bool AStar_Type1_ShaderClass::createConstantBuffer(ID3D11Device* device, ID3D11D
 	//agentList[agentsCount] = a1;
 	//agentsCount = agentsCount + 1;
 
+	// Agent 3: 	
+	sourceNode.x1 = 0;
+	sourceNode.y1 = 2;
+
+	targetNode.x1 = 2;
+	targetNode.y1 = 0;
+	a1.sourceLoc = sourceNode;
+	a1.targetLoc = targetNode;
+
+	
+	agentRender.sourceLoc = sourceNode;
+	agentRender.agentId = agentsCount;
+	a1.id = agentsCount;
+	agentRender.seed = rand();
+	agentRenderList[agentsCount] = agentRender;
+	agentList[agentsCount] = a1;
+	agentsCount = agentsCount + 1;
+
 	//// Agent 4: 	
-	//sourceNode.x1 = 0;
-	//sourceNode.y1 = 1;
+	sourceNode.x1 = 0;
+	sourceNode.y1 = 1;
 
-	//targetNode.x1 = 2;
-	//targetNode.y1 = 1;
-	//a1.sourceLoc = sourceNode;
-	//a1.targetLoc = targetNode;
+	targetNode.x1 = 2;
+	targetNode.y1 = 1;
+	a1.sourceLoc = sourceNode;
+	a1.targetLoc = targetNode;
 
 
-	//agentRender.sourceLoc = sourceNode;
-	//agentRender.agentId = agentsCount;
-	//a1.id = agentsCount;
-	//agentRender.seed = rand();
-	//agentRenderList[agentsCount] = agentRender;
-	//agentList[agentsCount] = a1;
-	//agentsCount = agentsCount + 1;
+	agentRender.sourceLoc = sourceNode;
+	agentRender.agentId = agentsCount;
+	a1.id = agentsCount;
+	agentRender.seed = rand();
+	agentRenderList[agentsCount] = agentRender;
+	agentList[agentsCount] = a1;
+	agentsCount = agentsCount + 1;
 
 	//// Agent 5: 	
-	//sourceNode.x1 = 2;
-	//sourceNode.y1 = 1;
+	sourceNode.x1 = 2;
+	sourceNode.y1 = 1;
 
-	//targetNode.x1 = 0;
-	//targetNode.y1 = 1;
-	//a1.sourceLoc = sourceNode;
-	//a1.targetLoc = targetNode;
+	targetNode.x1 = 0;
+	targetNode.y1 = 1;
+	a1.sourceLoc = sourceNode;
+	a1.targetLoc = targetNode;
 
 
-	//agentRender.sourceLoc = sourceNode;
-	//agentRender.agentId = agentsCount;
-	//a1.id = agentsCount;
-	//agentRender.seed = rand();
-	//agentRenderList[agentsCount] = agentRender;
-	//agentList[agentsCount] = a1;
-	//agentsCount = agentsCount + 1;
+	agentRender.sourceLoc = sourceNode;
+	agentRender.agentId = agentsCount;
+	a1.id = agentsCount;
+	agentRender.seed = rand();
+	agentRenderList[agentsCount] = agentRender;
+	agentList[agentsCount] = a1;
+	agentsCount = agentsCount + 1;
 
+	//// Agent 6: 	
+	sourceNode.x1 = 1;
+	sourceNode.y1 = 0;
+
+	targetNode.x1 = 1;
+	targetNode.y1 = 2;
+	a1.sourceLoc = sourceNode;
+	a1.targetLoc = targetNode;
+
+
+	agentRender.sourceLoc = sourceNode;
+	agentRender.agentId = agentsCount;
+	a1.id = agentsCount;
+	agentRender.seed = rand();
+	agentRenderList[agentsCount] = agentRender;
+	agentList[agentsCount] = a1;
+	agentsCount = agentsCount + 1;
+
+	//// Agent 7: 	
+	sourceNode.x1 = 1;
+	sourceNode.y1 = 2;
+
+	targetNode.x1 = 1;
+	targetNode.y1 = 0;
+	a1.sourceLoc = sourceNode;
+	a1.targetLoc = targetNode;
+
+
+	agentRender.sourceLoc = sourceNode;
+	agentRender.agentId = agentsCount;
+	a1.id = agentsCount;
+	agentRender.seed = rand();
+	agentRenderList[agentsCount] = agentRender;
+	agentList[agentsCount] = a1;
+	agentsCount = agentsCount + 1;
 	//*** Init 3200 Agents*********************************************/
 	//
 

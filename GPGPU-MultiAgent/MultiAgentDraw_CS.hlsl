@@ -60,17 +60,17 @@ RWStructuredBuffer<float2> testRandomSample: register(u6);
 #define MAP_DIMENSIONS 8
 #define CUBE_SIZE 2.5 // Width/height in pixel?
 #define NUM_AGENTS_PER_BLOCK 10
-#define AGENT_WIDTH 0.3
+#define AGENT_WIDTH 0.7
 #define UINT_SIZE 4
 //#define INFINITY +INF
 
 #define RVO_INFTY 9e9f
 
 #define m_sampleCountDefault 250
-#define m_prefSpeedDefault 0.3
-#define m_maxSpeedDefault 0.5
-#define m_safetyFactorDefault 0.001 // Worked 0.33
-#define m_maxAccelDefault 0.1
+#define m_prefSpeedDefault 0.5
+#define m_maxSpeedDefault 0.7
+#define m_safetyFactorDefault 3 // Worked 0.33
+#define m_maxAccelDefault 0.7
 
 float absSq(float2 q)
 {
@@ -149,6 +149,7 @@ float2 simulateNewVelocity(int agent_Id, Agent m_pOwner, float agent_radius, int
 			randomData = vCand;
 		}
 		else {
+			bool test = false;
 			do {
 				
 				randomData = float2(0.0, 0.0);
@@ -164,11 +165,8 @@ float2 simulateNewVelocity(int agent_Id, Agent m_pOwner, float agent_radius, int
 				randomData.y = new_seed;
 
 				// Update the seed into the Buffer
-				
-
+		
 				m_pOwner.seed = new_seed;
-
-				
 
 				float x = randX - N;
 				float y = randY - N;
@@ -181,9 +179,9 @@ float2 simulateNewVelocity(int agent_Id, Agent m_pOwner, float agent_radius, int
 				float absVCand = absSq(vCand);
 				float sqrRand_Max = sqr((float)N);
 
-				bool test = absVCand > sqrRand_Max;
+				test = absVCand > sqrRand_Max;
 
-			} while (absSq(vCand) > sqr((float)N));
+			} while (test);//absSq(vCand) > sqr((float)N));
 
 			//double max = m_maxSpeedDefault;
 			float max1 =  m_maxSpeedDefault;
@@ -270,19 +268,7 @@ float2 simulateNewVelocity(int agent_Id, Agent m_pOwner, float agent_radius, int
 
 	agentList[m_pOwner.agentId].seed = new_seed;
 
-	float2 final_velocity;
-
-	float dv = abs(return_final_velocity - m_pOwner.velocity_dir);
-	if (dv < m_maxAccelDefault * _timeStep) {
-		final_velocity = return_final_velocity;
-	}
-	else {
-		final_velocity = (1 - (m_maxAccelDefault * _timeStep / dv)) *  m_pOwner.velocity_dir + (m_maxAccelDefault * _timeStep / dv) * return_final_velocity;
-	}
-
-	agentList[m_pOwner.agentId].velocity_dir = final_velocity;
-
-	return final_velocity;
+	return return_final_velocity;
 
 }
 
@@ -296,6 +282,8 @@ void main(uint3 DTid : SV_DispatchThreadID)
 
 		float agent_half_width = AGENT_WIDTH / 2;
 		float agent_radius = sqrt((sqr(agent_half_width)) + sqr(agent_half_width));
+
+		agent_radius = agent_radius + agent_radius *0.3;
 
 		uint offset = gridId * (MAP_DIMENSIONS * MAP_DIMENSIONS);
 		// For testing take this i manually later make according DispatchId
@@ -335,11 +323,16 @@ void main(uint3 DTid : SV_DispatchThreadID)
 					interpol_B = pathList[offset + (interpol_id + 1)];
 					coord_B = g_GridCenterListInput[interpol_B];
 				}
-				float3 temp = coord_B - m_current_position;
-
+				float2 temp = coord_B.xz - m_current_position.xz;
+				float2 prefVelocity;
 				float distSq2subgoal = absSq(temp);
 
-				float3 prefVelocity = (temp * m_prefSpeedDefault) / sqrt(distSq2subgoal);
+				if (interpol_id + 2 > agent.pathCount && sqr(m_maxSpeedDefault * frameTime) > distSq2subgoal) {
+					prefVelocity = temp / frameTime;
+				}
+				else{
+					prefVelocity = (temp * m_prefSpeedDefault) / sqrt(distSq2subgoal);
+				}
 
 					int hash_index = floor(agent.current_position.x / CUBE_SIZE) +
 					MAP_DIMENSIONS *(floor(agent.current_position.z / CUBE_SIZE));
@@ -354,9 +347,9 @@ void main(uint3 DTid : SV_DispatchThreadID)
 					int agent_id_neighbour = SpatialAgentIdTableBuffer[index_agent];
 
 					if (agent_id_neighbour != agent_Id){
-						float dist = distance(m_current_position, agentList[agent_id_neighbour].current_position);
+						float dist = absSq(m_current_position.xz - agentList[agent_id_neighbour].current_position.xz);
 
-						if (dist < AGENT_WIDTH *3)// agent_radius)
+						if (dist < sqr(agent_radius + agent_radius))// agent_radius)
 						{
 							isCollision = true;
 						}
@@ -365,11 +358,25 @@ void main(uint3 DTid : SV_DispatchThreadID)
 
 				//(Agent m_pOwner, float agent_radius, int num_neighbours, int index_agent_offset, float2 prefVelocity, bool isCollison, float _timeStep)
 
-				float2 simulated_velocity = simulateNewVelocity(agent_Id, agent, AGENT_WIDTH * 3, num_neighbours, index_agent_offset, prefVelocity.xz, isCollision, frameTime);
+				float2 return_final_velocity = simulateNewVelocity(agent_Id, agent, agent_radius, num_neighbours, 
+					index_agent_offset, prefVelocity, isCollision, frameTime);
+
+				float2 simulated_velocity;
+
+				float dv = abs_vec(return_final_velocity - agent.velocity_dir);
+				if (dv < m_maxAccelDefault * frameTime) {
+					simulated_velocity = return_final_velocity;
+				}
+				else {
+					simulated_velocity = (1 - (m_maxAccelDefault * frameTime / dv)) *  agent.velocity_dir +
+						(m_maxAccelDefault * frameTime / dv) * return_final_velocity;
+				}
+
+				
 
 					//m_current_position += normalize(temp) * agent.velocity * frameTime;
 
-					m_current_position += float3(simulated_velocity.x * frameTime, 0.0, simulated_velocity.y * frameTime);
+					m_current_position += float3(simulated_velocity.x, 0.0, simulated_velocity.y) *frameTime;
 
 				agentList[agent_Id].current_position = m_current_position;
 				agentList[agent_Id].velocity_dir = simulated_velocity;
@@ -379,41 +386,6 @@ void main(uint3 DTid : SV_DispatchThreadID)
 
 		}
 	}
-
-	/*	if (interpol_id + 1 < agent.pathCount){
-	agentList[agent_Id].u = agentList[agent_Id].u + frameTime;
-	}
-	else
-	{
-	agentList[agent_Id].u = 1;
-	}*/
-	/*		if (agentList[agent_Id].u >= 1){
-	agentList[agent_Id].u = 0;
-
-	}*/
-	//float u = agentList[agent_Id].u;
-	//// Get Grid Id for interpolation
-
-	//float acc = 0.5;
-	//float x = coord_A.x + u * (coord_B.x - coord_A.x);
-	//float z = coord_A.z + u * (coord_B.z - coord_A.z);
-
-
-
-	//bufferOut[0] = g_GridCenterListInput[2];
-
-
-
-	//for (uint i = 0; i < 64; i++)
-	//{
-	//	agentList[i].currentInterpolationId = agentList[i].currentInterpolationId + 1;
-
-	//	if (agentList[i].u >= 1){
-	//		agentList[i].u = 0;
-	//	}
-	//	agentList[i].u = agentList[i].u + frameTime;
-	//}
-	//bufferOut[0].x = counter;
 }
 
 //*****Steps to implement the ROV***************
@@ -429,20 +401,3 @@ void main(uint3 DTid : SV_DispatchThreadID)
 //7. get the best velocity and terminate 
 
 //*********************************************
-
-
-//
-//uint counter = 0;
-//for (uint i = 0; i < 8; i++)
-//{
-//	for (uint j = 0; j < 8; j++)
-//	{
-//		bufferOut[counter] = g_GridCenterListInput[counter];
-//		counter++;
-//	}
-//}
-//
-//for (uint i = 0; i < 64; i++)
-//{
-//	agentList[i].currentInterpolationId = agentList[i].currentInterpolationId + 1;
-//}
