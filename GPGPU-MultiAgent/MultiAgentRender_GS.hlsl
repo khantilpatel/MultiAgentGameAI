@@ -34,9 +34,21 @@ void main(
 
 		
 		float4x4 WorldViewProj;
-		WorldViewProj = mul(viewMatrix, worldMatrix);
-		WorldViewProj = mul(WorldViewProj, projectionMatrix);
+		float r_angle = radians(20);
+		float my_sin = sin(r_angle);
+		float my_cos = cos(r_angle);
 
+		float4x4 rotationMat = float4x4(
+			my_cos, 0, -my_sin, 0,
+			0, 1, 0, 0 ,
+			my_sin, 0, my_cos, 0 ,
+			0, 0, 0, 1 
+		);
+
+		WorldViewProj = mul(rotationMat, worldMatrix);
+		WorldViewProj = mul(WorldViewProj, viewMatrix);
+		WorldViewProj = mul(WorldViewProj, projectionMatrix);
+		//WorldViewProj = mul(rotationMat, WorldViewProj);
 		//////////////////////////////////////////////////////////////////////////
 		//Left 0
 		VertexOut element0;

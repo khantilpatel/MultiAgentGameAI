@@ -68,8 +68,8 @@ RWStructuredBuffer<float2> testRandomSample: register(u6);
 
 #define m_sampleCountDefault 250
 #define m_prefSpeedDefault 0.5
-#define m_maxSpeedDefault 0.7
-#define m_safetyFactorDefault 0.3 // Worked 0.33
+#define m_maxSpeedDefault 0.8
+#define m_safetyFactorDefault 0.3// Worked 0.33
 #define m_maxAccelDefault 0.3
 #define MOORS_CONST 1
 

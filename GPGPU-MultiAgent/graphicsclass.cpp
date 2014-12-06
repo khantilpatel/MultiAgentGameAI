@@ -204,6 +204,31 @@ bool GraphicsClass::Render()
 	m_D3D->SetRasterState_Default();
 	/////////////////////////////////////////////////////////////////////
 
+	/////////////////////////////////////////////////////////////////////
+	// AI A*- Type-1 RENDERING
+	/////////////////////////////////////////////////////////////////////
+
+
+	if (executeOnceAStar_Type1){
+		// m_AStar_Type1_ShaderClass->Initialize(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), nullptr);
+		// m_MultiAgentDrawClass->Initialize(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), nullptr);
+
+		m_AStar_Type1_ShaderClass->Render(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), 0, 0, NULL, NULL);
+		executeOnceAStar_Type1 = false;
+
+	}
+	///////////////////////////////////////////////////////////////////
+	// RENDER Multi Agent Display
+	/////////////////////////////////////////////////////////////////////
+	m_MultiAgentDrawClass->Render(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), worldMatrix, viewMatrix,
+		projectionMatrix, m_frameTime / 1000, m_TotalTime / 1000, frame_count, m_Camera->GetPosition_XM(),
+		m_AStar_Type1_ShaderClass->m_BufRenderAgentList_URV, m_AStar_Type1_ShaderClass->m_BufRenderAgentPathList_URV);
+
+	m_D3D->EndScene();
+
+	frame_count++;
+
+	return true;
 
 	///////////////////////////////////////////////////////////////////
 	// RENDER FIRE PARTICLES
@@ -229,19 +254,6 @@ bool GraphicsClass::Render()
 	//m_RainParticleSystem->RenderShader_Draw(m_D3D->GetDeviceContext());
 	/////////////////////////////////////////////////////////////////////
 
-	/////////////////////////////////////////////////////////////////////
-	// AI A*- Type-1 RENDERING
-	/////////////////////////////////////////////////////////////////////
-	
-
-	 if (executeOnceAStar_Type1){
-		// m_AStar_Type1_ShaderClass->Initialize(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), nullptr);
-		// m_MultiAgentDrawClass->Initialize(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), nullptr);
-
-		 m_AStar_Type1_ShaderClass->Render(m_D3D->GetDevice(), m_D3D->GetDeviceContext(), 0, 0, NULL, NULL);
-		 executeOnceAStar_Type1 = false;
-		
-	 }
 	
 	/*int  *agentRenderPathList;
 	AStar_Type1_ShaderClass::AgentRender *agentRenderList;
@@ -250,12 +262,6 @@ bool GraphicsClass::Render()
 
 	/////////////////////////////////////////////////////////////////////
 
-	///////////////////////////////////////////////////////////////////
-	// RENDER Multi Agent Display
-	/////////////////////////////////////////////////////////////////////
-	m_MultiAgentDrawClass->Render(m_D3D->GetDevice(),m_D3D->GetDeviceContext(), worldMatrix, viewMatrix,
-		projectionMatrix, m_frameTime / 1000, m_TotalTime / 1000, frame_count, m_Camera->GetPosition_XM(),
-	m_AStar_Type1_ShaderClass->m_BufRenderAgentList_URV, m_AStar_Type1_ShaderClass->m_BufRenderAgentPathList_URV);
 
 		///////////////////////////////////////////////////////////////////////////////
 		// Debug Agent List Data
@@ -333,9 +339,7 @@ bool GraphicsClass::Render()
 	//}
 
 	// Present the rendered scene to the screen.
-	m_D3D->EndScene();
-	frame_count++;
-	return true;
+
 }
 
 
