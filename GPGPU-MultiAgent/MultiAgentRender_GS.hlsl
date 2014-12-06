@@ -29,7 +29,7 @@ void main(
 	float scale = 0;
 	float halfscale= 0;
 	
-		scale = 0.7;
+		scale = 0.3;
 		halfscale = scale *0.5;
 
 		

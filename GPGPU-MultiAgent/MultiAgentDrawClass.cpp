@@ -94,7 +94,7 @@ bool MultiAgentDrawClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* 
 	m_computeshader_helper->CreateBufferUAV(device, m_Buffer_PsudoRandom, &m_view_psudo_random_URV);
 	///////////////////////////////////////////////////////////////////////////////////
 	// Load Texture for Floor and other stuff
-	m_FloorTextureSRV = m_ShaderUtility->CreateTextureFromFile(device, L"Textures/edited_floor.dds");
+	m_FloorTextureSRV = m_ShaderUtility->CreateTextureFromFile(device, L"Textures/floor.dds");
 	m_CollisionWallSRV = m_ShaderUtility->CreateTextureFromFile(device, L"Textures/stone.dds");
 	m_CubeTextureSRV = m_ShaderUtility->CreateTextureFromFile(device, L"Textures/cube.jpg");
 
@@ -778,7 +778,7 @@ void MultiAgentDrawClass::RenderMultipleAgentShader(ID3D11Device* device, ID3D11
 	// Set the sampler state in the pixel shader.
 	//deviceContext->PSSetSamplers(0, 1, &m_sampleState);
 	////////////////////////////////////////////////////////////////////////////////////
-	deviceContext->Draw(6,0);//3200, 0);
+	deviceContext->Draw(3200, 0);//3200, 0);
 
 	deviceContext->GSSetConstantBuffers(0, 1, bufferArray);
 	deviceContext->GSSetShader(NULL, NULL, 0);

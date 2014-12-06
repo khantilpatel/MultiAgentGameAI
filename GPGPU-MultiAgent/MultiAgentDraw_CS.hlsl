@@ -60,7 +60,7 @@ RWStructuredBuffer<float2> testRandomSample: register(u6);
 #define MAP_DIMENSIONS 8
 #define CUBE_SIZE 2.5 // Width/height in pixel?
 #define NUM_AGENTS_PER_BLOCK 10
-#define AGENT_WIDTH 0.7
+#define AGENT_WIDTH 0.3
 #define UINT_SIZE 4
 //#define INFINITY +INF
 
@@ -69,8 +69,9 @@ RWStructuredBuffer<float2> testRandomSample: register(u6);
 #define m_sampleCountDefault 250
 #define m_prefSpeedDefault 0.5
 #define m_maxSpeedDefault 0.7
-#define m_safetyFactorDefault 3 // Worked 0.33
-#define m_maxAccelDefault 0.7
+#define m_safetyFactorDefault 0.3 // Worked 0.33
+#define m_maxAccelDefault 0.3
+#define MOORS_CONST 1
 
 float absSq(float2 q)
 {
@@ -121,7 +122,7 @@ float computeTimeToCollison(float2 p, float2 v, float2 p2, float radius, bool co
 	return time;
 }
 
-float2 simulateNewVelocity(int agent_Id, Agent m_pOwner, float agent_radius, int num_neighbours, int index_agent_offset, float2 prefVelocity, bool isCollison, float _timeStep)
+float2 simulateNewVelocity(int agent_Id, Agent m_pOwner, float agent_radius, float2 prefVelocity, bool isCollison, float _timeStep)
 {
 	float2 return_final_velocity ;
 
@@ -200,10 +201,6 @@ float2 simulateNewVelocity(int agent_Id, Agent m_pOwner, float agent_radius, int
 		float dV; // distance between candidate velocity and preferred velocity
 		if (isCollison) {
 			dV = 0;
-			if (num_neighbours > 1)
-			{
-				dV = 0;
-			}
 		}
 		else {
 			dV = abs_vec(vCand - prefVelocity);
@@ -213,47 +210,68 @@ float2 simulateNewVelocity(int agent_Id, Agent m_pOwner, float agent_radius, int
 		// searching for smallest time to collision
 		float ct = RVO_INFTY; // time to collision
 		// iterate over neighbors
+		int x = floor(m_pOwner.current_position.x / CUBE_SIZE);
+		int y = floor(m_pOwner.current_position.z / CUBE_SIZE);
 
-		for (int i = 0; i < num_neighbours; i++)
+		int hash_index = x + MAP_DIMENSIONS * y;
+
+		for (int i = -1; i <= MOORS_CONST; i++)
 		{
-			int index_agent = index_agent_offset + i;
-			int agent_id_neighbour = SpatialAgentIdTableBuffer[index_agent];
+			for (int j = -1; j <= MOORS_CONST; j++)
+			{
+				if ((x + i >= 0 && x + i < MAP_DIMENSIONS) && (y + j >= 0 && y + j < MAP_DIMENSIONS))
+				{
 
-			if (agent_id_neighbour != m_pOwner.agentId){
-				float ct_j; // time to collision with agent j
-				float2 Vab;
+					int hash_id = (x + i) + MAP_DIMENSIONS * (y + j);
 
-				Agent other = agentList[agent_id_neighbour];
+					uint num_neighbours = SpatialIndexTableBuffer.Load(hash_id*UINT_SIZE);
+					int index_agent_offset = (hash_id * NUM_AGENTS_PER_BLOCK);
 
-				//TODO: Test this explicitly
-				Vab = 2.0f * vCand - m_pOwner.velocity_dir - other.velocity_dir;
+					for (uint k = 0; k < num_neighbours; k++)
+					{
+						int index_agent = index_agent_offset + k;
+						int agent_id_neighbour = SpatialAgentIdTableBuffer[index_agent];
 
-				float time =
-					computeTimeToCollison(
-					m_pOwner.current_position.xz,
-					Vab,
-					other.current_position.xz,
-					agent_radius + agent_radius,
-					isCollison);
+						if (agent_id_neighbour != agent_Id){
 
-				if (isCollison) {
-					ct_j = -ceil(time / _timeStep);
-					ct_j -= absSq(vCand) / sqr(m_maxSpeedDefault);
-				}
-				else {
-					ct_j = time;
-				}
+							float ct_j; // time to collision with agent j
+							float2 Vab;
+
+							Agent other = agentList[agent_id_neighbour];
+
+							//TODO: Test this explicitly
+							Vab = 2.0f * vCand - m_pOwner.velocity_dir - other.velocity_dir;
+
+							float time =
+								computeTimeToCollison(
+								m_pOwner.current_position.xz,
+								Vab,
+								other.current_position.xz,
+								agent_radius + agent_radius,
+								isCollison);
+
+							if (isCollison) {
+								ct_j = -ceil(time / _timeStep);
+								ct_j -= absSq(vCand) / sqr(m_maxSpeedDefault);
+							}
+							else {
+								ct_j = time;
+							}
 
 
-				if (ct_j < ct) {
-					ct = ct_j;
-					// pruning search if no better penalty can be obtained anymore for this velocity
-					if (m_safetyFactorDefault / ct + dV >= min_penalty) {
-						break;
+							if (ct_j < ct) {
+								ct = ct_j;
+								// pruning search if no better penalty can be obtained anymore for this velocity
+								if (m_safetyFactorDefault / ct + dV >= min_penalty) {
+									break;
+								}
+							}
+						}
 					}
 				}
 			}
 		}
+		
 
 		float penalty = m_safetyFactorDefault / ct + dV;
 		if (penalty < min_penalty) {
@@ -334,32 +352,54 @@ void main(uint3 DTid : SV_DispatchThreadID)
 					prefVelocity = (temp * m_prefSpeedDefault) / sqrt(distSq2subgoal);
 				}
 
-					int hash_index = floor(agent.current_position.x / CUBE_SIZE) +
-					MAP_DIMENSIONS *(floor(agent.current_position.z / CUBE_SIZE));
+					/*int hash_index = floor(agent.current_position.x / CUBE_SIZE) +
+					MAP_DIMENSIONS *(floor(agent.current_position.z / CUBE_SIZE));*/
+				
+					int x = floor(agent.current_position.x / CUBE_SIZE);
+					int y = floor(agent.current_position.z / CUBE_SIZE);
+
+					int hash_index = x + MAP_DIMENSIONS * y;
 
 				bool isCollision = false;
 
-				uint num_neighbours = SpatialIndexTableBuffer.Load(hash_index*UINT_SIZE);
-				int index_agent_offset = (hash_index * NUM_AGENTS_PER_BLOCK);
-				for (uint i = 0; i < num_neighbours; i++)
+				
+
+				for (int i = -1; i <= MOORS_CONST; i++)
 				{
-					int index_agent = index_agent_offset + i;
-					int agent_id_neighbour = SpatialAgentIdTableBuffer[index_agent];
+					for (int j = -1; j <= MOORS_CONST; j++)
+					{
+						if ((x + i >= 0 && x + i < MAP_DIMENSIONS) && (y + j >= 0 && y + j < MAP_DIMENSIONS)){
+						
+							int hash_id = (x + i) + MAP_DIMENSIONS * (y + j);
 
-					if (agent_id_neighbour != agent_Id){
-						float dist = absSq(m_current_position.xz - agentList[agent_id_neighbour].current_position.xz);
+							uint num_neighbours = SpatialIndexTableBuffer.Load(hash_id*UINT_SIZE);
+							int index_agent_offset = (hash_id * NUM_AGENTS_PER_BLOCK);
 
-						if (dist < sqr(agent_radius + agent_radius))// agent_radius)
-						{
-							isCollision = true;
+							for (uint k = 0; k < num_neighbours; k++)
+							{
+								int index_agent = index_agent_offset + k;
+								int agent_id_neighbour = SpatialAgentIdTableBuffer[index_agent];
+
+								if (agent_id_neighbour != agent_Id){
+									float dist = absSq(m_current_position.xz - agentList[agent_id_neighbour].current_position.xz);
+
+									if (dist < sqr(agent_radius + agent_radius))// agent_radius)
+									{
+										isCollision = true;
+									}
+								}
+							}
+
 						}
 					}
 				}
 
+			
+
 				//(Agent m_pOwner, float agent_radius, int num_neighbours, int index_agent_offset, float2 prefVelocity, bool isCollison, float _timeStep)
 
-				float2 return_final_velocity = simulateNewVelocity(agent_Id, agent, agent_radius, num_neighbours, 
-					index_agent_offset, prefVelocity, isCollision, frameTime);
+				float2 return_final_velocity = simulateNewVelocity(agent_Id, agent, agent_radius,
+					prefVelocity, isCollision, frameTime);
 
 				float2 simulated_velocity;
 
