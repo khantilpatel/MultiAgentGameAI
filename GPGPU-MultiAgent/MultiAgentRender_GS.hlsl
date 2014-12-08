@@ -38,6 +38,8 @@ void main(
 		float my_sin = sin(r_angle);
 		float my_cos = cos(r_angle);
 
+
+
 		float4x4 rotationMat = float4x4(
 			my_cos, 0, -my_sin, 0,
 			0, 1, 0, 0 ,
@@ -45,88 +47,78 @@ void main(
 			0, 0, 0, 1 
 		);
 
-		WorldViewProj = mul(rotationMat, worldMatrix);
+		float4x4 transMat = float4x4(
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			input[0].x, input[0].y, input[0].z, 1
+			);
+
+		WorldViewProj = mul(rotationMat, transMat);
 		WorldViewProj = mul(WorldViewProj, viewMatrix);
 		WorldViewProj = mul(WorldViewProj, projectionMatrix);
+
 		//WorldViewProj = mul(rotationMat, WorldViewProj);
 		//////////////////////////////////////////////////////////////////////////
+		//element0.position = 
+
+
+
+		float4 local0 = float4(-halfscale, 0, halfscale, 1);
+		float4 local1 = float4(-halfscale, scale, halfscale, 1);
+		float4 local2 = float4(halfscale, scale, halfscale, 1);
+		float4 local3 = float4(halfscale, 0, halfscale, 1);
+		float4 local4 = float4(-halfscale, 0, -halfscale, 1);
+		float4 local5 = float4(-halfscale, scale, -halfscale, 1);
+		float4 local6 = float4(halfscale, scale, -halfscale, 1);
+		float4 local7 = float4(halfscale, 0, -halfscale, 1);
+
 		//Left 0
 		VertexOut element0;
-		element0.position.x = input[0].x - halfscale;
-		element0.position.y = input[0].y;
-		element0.position.z = input[0].z + halfscale;
-		element0.position.w = input[0].w;
-		element0.position = mul(element0.position, WorldViewProj);
+		element0.position = mul(local0, WorldViewProj);
 		element0.tex.x = 0.0f;
 		element0.tex.y = 0.0f;
 
 		//Top-left 1
 		VertexOut element1;
-		element1.position.x = input[0].x - halfscale;
-		element1.position.y = input[0].y + scale;
-		element1.position.z = input[0].z + halfscale;
-		element1.position.w = input[0].w;
-		element1.position = mul(element1.position, WorldViewProj);
+
+		element1.position = mul(local1, WorldViewProj);
 		element1.tex.x = 0.0f;
 		element1.tex.y = 1.0f;
 
 		// Top-Right 2
 		VertexOut element2;
-		element2.position.x = input[0].x + halfscale;
-		element2.position.y = input[0].y + scale;
-		element2.position.z = input[0].z + halfscale;
-		element2.position.w = input[0].w;
-		element2.position = mul(element2.position, WorldViewProj);
+		element2.position = mul(local2, WorldViewProj);
 		element2.tex.x = 1.0f;
 		element2.tex.y = 1.0f;
 
 		// Vertex 3
-		VertexOut element3;
-		element3.position.x = input[0].x + halfscale;
-		element3.position.y = input[0].y;
-		element3.position.z = input[0].z + halfscale;
-		element3.position.w = input[0].w;
-		element3.position = mul(element3.position, WorldViewProj);
+		VertexOut element3;	
+		element3.position = mul(local3, WorldViewProj);
 		element3.tex.x = 1.0f;
 		element3.tex.y = 0.0f;
 		////////////////////////////////////////
 		// 4
 		VertexOut element4;
-		element4.position.x = input[0].x - halfscale;
-		element4.position.y = input[0].y;
-		element4.position.z = input[0].z - halfscale;
-		element4.position.w = input[0].w;
-		element4.position = mul(element4.position, WorldViewProj);
+		element4.position = mul(local4, WorldViewProj);
 		element4.tex.x = 0.0f;
 		element4.tex.y = 0.0f;
 
 		// 5
 		VertexOut element5;
-		element5.position.x = input[0].x - halfscale;
-		element5.position.y = input[0].y + scale;
-		element5.position.z = input[0].z - halfscale;
-		element5.position.w = input[0].w;
-		element5.position = mul(element5.position, WorldViewProj);
+		element5.position = mul(local5, WorldViewProj);
 		element5.tex.x = 0.0f;
 		element5.tex.y = 1.0f;
 
 		// 6
 		VertexOut element6;
-		element6.position.x = input[0].x + halfscale;
-		element6.position.y = input[0].y + scale;
-		element6.position.z = input[0].z - halfscale;
-		element6.position.w = input[0].w;
-		element6.position = mul(element6.position, WorldViewProj);
+		element6.position = mul(local6, WorldViewProj);
 		element6.tex.x = 1.0f;
 		element6.tex.y = 1.0f;
 
 		// 7
-		VertexOut element7;
-		element7.position.x = input[0].x + halfscale;
-		element7.position.y = input[0].y;
-		element7.position.z = input[0].z - halfscale;
-		element7.position.w = input[0].w;
-		element7.position = mul(element7.position, WorldViewProj);
+		VertexOut element7;	
+		element7.position = mul(local7, WorldViewProj);
 		element7.tex.x = 1.0f;
 		element7.tex.y = 0.0f;
 		////Front Face
